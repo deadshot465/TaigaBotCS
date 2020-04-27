@@ -19,8 +19,8 @@ namespace TaigaBotCS.Services
         private readonly CommandService _commands;
         private readonly DiscordSocketClient _client;
         private readonly IServiceProvider _services;
-        private Dictionary<string, Dictionary<string, DateTime>> _cooldowns =
-            new Dictionary<string, Dictionary<string, DateTime>>();
+        private Dictionary<string, Dictionary<ulong, DateTime>> _cooldowns =
+            new Dictionary<string, Dictionary<ulong, DateTime>>();
         private Random _rng = new Random();
         private Stopwatch _stopWatch = new Stopwatch();
 
@@ -41,6 +41,12 @@ namespace TaigaBotCS.Services
             _stopWatch.Start();
         }
 
+        public async Task ExecuteWithDelay(Action action, double timeOut)
+        {
+            await Task.Delay((int)timeOut);
+            action.Invoke();
+        }
+
         public async Task InitializeAsync()
         {
             await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
@@ -50,6 +56,11 @@ namespace TaigaBotCS.Services
         {
             if (!(rawMessage is SocketUserMessage message)) return;
             if (message.Source != MessageSource.User) return;
+
+            var authorId = message.Author.Id;
+            var memberConfig = Helper.GetMemberConfig(authorId);
+            var responseText = (memberConfig?.Language == "en") ? Helper.GetLocalization("en")
+                : Helper.GetLocalization("jp");
 
             // Don't do anything in venting channel
             var ignoreChannels = new[] { DotNetEnv.Env.GetString("VENTCHN") };
@@ -73,8 +84,35 @@ namespace TaigaBotCS.Services
                 return;
             }
 
-            // Get or add member configs
-            var memberConfig = Helper.GetMemberConfig(message.Author.Id);
+            var command = message.Content.Substring(argPos).Split(' ')[0];
+
+            // Check if the user is on cooldown
+            var now = DateTime.Now;
+            var res = _cooldowns.TryGetValue(command, out var timestamps);
+            var attribute = typeof(CommandHandlingService).Assembly
+                .GetCustomAttributes()
+                .Where(attr =>
+                {
+                    return attr.GetType() == typeof(Commands.Attributes.CommandAttribute) &&
+                    ((Commands.Attributes.CommandAttribute)attr).Name == command;
+                })
+                .First() as Commands.Attributes.CommandAttribute;
+            var cooldownAmount = attribute.Cooldown * 1000.0;
+
+            if (timestamps.TryGetValue(message.Author.Id, out var startTime))
+            {
+                var expirationTime = startTime.AddMilliseconds(cooldownAmount);
+
+                if (now < expirationTime)
+                {
+                    var timeLeft = (expirationTime - now).TotalMilliseconds / 1000.0;
+                    var cooldownMsg = responseText.texts.cooldown
+                        .Replace("{timeLeft}", (Math.Round(timeLeft * 10.0) / 10.0).ToString())
+                        .Replace("{cmd}", command);
+                    await message.Channel.SendMessageAsync(cooldownMsg);
+                    return;
+                }
+            }
 
             if (!memberConfig.HasValue)
             {
@@ -86,7 +124,6 @@ namespace TaigaBotCS.Services
                 Console.WriteLine(memberConfig);
                 Console.WriteLine("Found config.");
             }
-
             var context = new SocketCommandContext(_client, message);
             await _commands.ExecuteAsync(context, argPos, _services);
         }
@@ -116,34 +153,25 @@ namespace TaigaBotCS.Services
 
             // Add the command to the cooldown
             if (!_cooldowns.ContainsKey(command))
-                _cooldowns[command] = new Dictionary<string, DateTime>();
+                _cooldowns[command] = new Dictionary<ulong, DateTime>();
 
             // Set the cooldown's timestamp
             var now = DateTime.Now;
             var res = _cooldowns.TryGetValue(command, out var timestamps);
-            var attribute = commandInfo.Value.Attributes
+            var attribute = commandInfo.Value.Module.Attributes
                 .Where(attr => attr.GetType() == typeof(Commands.Attributes.CommandAttribute))
                 .First() as Commands.Attributes.CommandAttribute;
             var cooldownAmount = attribute.Cooldown * 1000.0;
 
-            // Check if the user is on cooldown
-            if (timestamps.TryGetValue(authorId.ToString(), out var startTime))
-            {
-                var expirationTime = startTime.AddMilliseconds(cooldownAmount);
-
-                if (now < expirationTime)
-                {
-                    var timeLeft = (expirationTime - now).TotalMilliseconds / 1000.0;
-                    var cooldownMsg = responseText.texts.cooldown
-                        .Replace("{timeLeft}", (Math.Round(timeLeft * 10.0) / 10.0).ToString())
-                        .Replace("{cmd}", command);
-                    await context.Channel.SendMessageAsync(cooldownMsg);
-                }
-            }
+            // Add the author to the cooldown timestamps,
+            // then remove the command after cooldown expires.
+            timestamps.Add(authorId, DateTime.Now);
+            ExecuteWithDelay(() => timestamps.Remove(authorId), cooldownAmount);
 
             if (result.IsSuccess) return;
 
-            await context.Channel.SendMessageAsync($"Error: {result}");
+            Console.Error.WriteLine($"Error: {result}");
+            await context.Channel.SendMessageAsync(responseText.texts.execution_failure);
         }
 
         public async Task SetPresence(SocketMessage rawMessage)
