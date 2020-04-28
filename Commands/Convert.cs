@@ -1,4 +1,7 @@
-﻿using Discord;
+﻿// Copyright(C) 2020 Tetsuki Syu
+// See Program.cs for the full notice.
+
+using Discord;
 using Discord.Commands;
 using System;
 using System.Collections.Generic;
@@ -6,27 +9,28 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using TaigaBotCS.Interfaces;
 using TaigaBotCS.Utility;
 
 namespace TaigaBotCS.Commands
 {
     [Attributes.Command("cvt", "util", null, new[] { "convert" })]
-    public class Convert : ModuleBase<SocketCommandContext>
+    public class Convert : ModuleBase<SocketCommandContext>, IMemberConfigurable
     {
-        private static readonly string[] _lengths = new[]
+        private readonly string[] _lengths = new[]
         {
             "km", "m", "cm", "in", "ft", "mi", "au"
         };
 
-        private static readonly string[] _temps = new[]
+        private readonly string[] _temps = new[]
         {
             "c", "f", "k"
         };
 
-        private static readonly string[] _validUnits = _lengths.Concat(_temps).ToArray();
-        private static readonly int _timeOut = 15 * 1000;
-        private static readonly Regex _cvtPattern = new Regex(@"(-?[0-9.]+)(\D{1,2})");
-        private static Dictionary<string, Dictionary<string, double>> _lookupLength
+        private readonly string[] _validUnits;
+        private readonly int _timeOut = 15 * 1000;
+        private readonly Regex _cvtPattern = new Regex(@"(-?[0-9.]+)(\D{1,2})");
+        private Dictionary<string, Dictionary<string, double>> _lookupLength
             = new Dictionary<string, Dictionary<string, double>>
             {
                 { "km", new Dictionary<string, double>
@@ -72,7 +76,7 @@ namespace TaigaBotCS.Commands
                 } },
             };
 
-        private static Dictionary<string, Dictionary<string, double>> _lookupTemperature
+        private Dictionary<string, Dictionary<string, double>> _lookupTemperature
             = new Dictionary<string, Dictionary<string, double>>
             {
                 { "c", new Dictionary<string, double>
@@ -91,12 +95,12 @@ namespace TaigaBotCS.Commands
                 } }
             };
 
-        private static Dictionary<ulong, Dictionary<string, object>> _cvtCommandTexts
+        private Dictionary<ulong, Dictionary<string, object>> _cvtCommandTexts
             = new Dictionary<ulong, Dictionary<string, object>>();
 
         private enum ConversionError
         {
-            InvalidUnit, WrongPattern
+            LengthTooShort, InvalidUnit, WrongPattern
         }
 
         public Convert() : base()
@@ -106,11 +110,22 @@ namespace TaigaBotCS.Commands
                 .Replace("{temps}", string.Join(", ", _temps));
             usage = usage.Replace("{heights}", string.Join(", ", _lengths));
 
-            var attr = TypeDescriptor.GetAttributes(typeof(Convert))
-                .OfType<Attributes.CommandAttribute>().FirstOrDefault();
+            _validUnits = _lengths.Concat(_temps).ToArray();
+
             TypeDescriptor.AddAttributes(typeof(Convert),
                 new Attributes.CommandAttribute("cvt", "util", usage, new[] { "convert" }));
         }
+
+#pragma warning disable CS1998
+        [Command("cvt")]
+        [Alias("convert")]
+        public async Task ConvertAsync()
+            => _ = HandleErrorAsync(ConversionError.LengthTooShort, null);
+
+        [Command("cvt")]
+        [Alias("convert")]
+        public async Task ConvertAsync(string targetUnit)
+            => _ = HandleErrorAsync(ConversionError.LengthTooShort, null);
 
         [Command("cvt")]
         [Alias("convert")]
@@ -122,57 +137,38 @@ namespace TaigaBotCS.Commands
             targetUnit = targetUnit.ToLower();
             sourceUnit = sourceUnit.ToLower();
 
-            var memberConfig = Helper.GetMemberConfig(Context.User.Id);
-            var responseText = Helper.GetLocalization(memberConfig?.Language);
-            if (!_cvtCommandTexts.ContainsKey(Context.User.Id))
-            {
-                _cvtCommandTexts[Context.User.Id] = responseText.texts.cvt;
-            }
+            SetMemberConfig(Context.User.Id);
 
             if (!_validUnits.Contains(targetUnit))
             {
-                _ = HandleErrorAsync(Context, ConversionError.InvalidUnit, null);
+                _ = HandleErrorAsync(ConversionError.InvalidUnit, null);
                 return;
             }
             else if (!_cvtPattern.IsMatch(sourceUnit))
             {
-                _ = HandleErrorAsync(Context, ConversionError.WrongPattern, sourceUnit);
+                _ = HandleErrorAsync(ConversionError.WrongPattern, sourceUnit);
                 return;
             }
 
             _ = SendMessageAndDeleteAfterTimeout(Context, ExecuteConversion(targetUnit, sourceUnit), _timeOut);
         }
 
-        public static async Task HandleErrorAsync(ICommandContext context, CommandError error)
-        {
-            if (!_cvtCommandTexts.ContainsKey(context.User.Id))
-            {
-                var responseText = Helper
-                    .GetLocalization(Helper.GetMemberConfig(context.User.Id)?.Language);
-                _cvtCommandTexts[context.User.Id] = responseText.texts.cvt;
-            }
+        [Command("cvt")]
+        [Alias("convert")]
+        public async Task ConvertAsync(string targetUnit, string sourceUnit, params string[] rest)
+            => _ = ConvertAsync(targetUnit, sourceUnit);
+#pragma warning restore CS1998
 
-            var cvtCmd = _cvtCommandTexts[context.User.Id];
+        private async Task HandleErrorAsync(ConversionError error, string sourceUnit)
+        {
+            SetMemberConfig(Context.User.Id);
+            var cvtCmd = _cvtCommandTexts[Context.User.Id];
             var cvtErrors = cvtCmd["errors"] as Dictionary<string, object>;
 
             var lengthTooShort = cvtErrors["length_too_short"].ToString()
                 .Replace("{temps}", string.Join(", ", _temps))
                 .Replace("{heights}", string.Join(", ", _lengths))
                 .Replace("{prefix}", DotNetEnv.Env.GetString("PREFIX"));
-
-            var msg = error switch
-            {
-                CommandError.BadArgCount => lengthTooShort.Trim(),
-                _ => string.Empty
-            };
-
-            await SendMessageAndDeleteAfterTimeout(context, msg, _timeOut);
-        }
-
-        private static async Task HandleErrorAsync(ICommandContext context, ConversionError error, string? sourceUnit)
-        {
-            var cvtCmd = _cvtCommandTexts[context.User.Id];
-            var cvtErrors = cvtCmd["errors"] as Dictionary<string, object>;
 
             var invalidUnitMsg = cvtErrors["invalid_unit"].ToString()
                 .Replace("{units}", string.Join(", ", _validUnits));
@@ -182,15 +178,16 @@ namespace TaigaBotCS.Commands
 
             string msg = error switch
             {
+                ConversionError.LengthTooShort => lengthTooShort,
                 ConversionError.InvalidUnit => invalidUnitMsg,
                 ConversionError.WrongPattern => wrongPatterns,
                 _ => string.Empty
             };
 
-            await SendMessageAndDeleteAfterTimeout(context, msg, _timeOut);
+            await SendMessageAndDeleteAfterTimeout(Context, msg, _timeOut);
         }
 
-        private static async Task SendMessageAndDeleteAfterTimeout(ICommandContext context,
+        private async Task SendMessageAndDeleteAfterTimeout(ICommandContext context,
             string message, int timeOut)
         {
             var requestOptions = new RequestOptions
@@ -201,6 +198,15 @@ namespace TaigaBotCS.Commands
             var task = await context.Channel.SendMessageAsync(message);
             await Task.Delay(timeOut);
             await task.DeleteAsync(requestOptions);
+        }
+
+        public void SetMemberConfig(ulong userId)
+        {
+            if (_cvtCommandTexts.ContainsKey(userId)) return;
+
+            var responseText = Helper
+                .GetLocalization(Helper.GetMemberConfig(userId)?.Language);
+            _cvtCommandTexts[userId] = responseText.texts.cvt;
         }
 
         private bool AreCompatible(string targetUnit, string sourceUnit)

@@ -92,7 +92,12 @@ namespace TaigaBotCS.Services
                 .GetTypes()
                 .Where(t => t.GetCustomAttributes(typeof(Commands.Attributes.CommandAttribute), true).Length > 0);
             var attribute = allCommands
-                .Where(t => t.GetCustomAttribute<Commands.Attributes.CommandAttribute>().Name == command)
+                .Where(t =>
+                {
+                    var attr = t.GetCustomAttribute<Commands.Attributes.CommandAttribute>();
+                    return attr.Name == command ||
+                    (attr.Aliases != null && attr.Aliases.Contains(command));
+                })
                 .First().GetCustomAttribute<Commands.Attributes.CommandAttribute>();
             var cooldownAmount = attribute.Cooldown * 1000.0;
 
@@ -113,15 +118,8 @@ namespace TaigaBotCS.Services
 
             // Setting up member configurations
             if (!memberConfig.HasValue)
-            {
                 Helper.AddMemberConfig(message.Author, message.Author.Id, "en");
-                Console.WriteLine("Member config pushed to the array.");
-            }
-            else
-            {
-                Console.WriteLine(memberConfig);
-                Console.WriteLine("Found config.");
-            }
+            
             var context = new SocketCommandContext(_client, message);
             await _commands.ExecuteAsync(context, argPos, _services);
         }
@@ -168,7 +166,7 @@ namespace TaigaBotCS.Services
             // Handle any captured error
             if (result.Error.HasValue)
             {
-                HandleErrorAsync(context, result.Error.Value, command);
+                //HandleErrorAsync(context, result.Error.Value, command);
                 return;
             }
 

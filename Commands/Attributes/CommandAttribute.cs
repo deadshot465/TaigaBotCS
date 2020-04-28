@@ -13,12 +13,11 @@ namespace TaigaBotCS.Commands.Attributes
         public string Name { get; private set; }
         public string Category { get; private set; }
         public float Cooldown { get; private set; }
-        public string[]? Aliases { get; private set; }
+        public string[] Aliases { get; private set; }
 
         public string Description { get; set; }
         public string Usage { get; set; }
 
-#nullable enable
         /// <summary>
         /// A custom attribute that helps settings up information of a command.
         /// </summary>
@@ -27,7 +26,7 @@ namespace TaigaBotCS.Commands.Attributes
         /// <param name="usage">(Optional) The command's usage.</param>
         /// <param name="aliases">The command's aliases.</param>
         /// <param name="cooldown">The command's cooldown. Default to 3 seconds.</param>
-        public CommandAttribute(string name, string category, string? usage, string[]? aliases, float cooldown = 3.0f)
+        public CommandAttribute(string name, string category, string usage, string[] aliases, float cooldown = 3.0f)
         {
             var localizedStrings = Helper.GetLocalization("en");
             var field = localizedStrings.texts.GetType().GetField(name);
@@ -40,6 +39,5 @@ namespace TaigaBotCS.Commands.Attributes
             Aliases = aliases ?? null;
             Cooldown = cooldown;
         }
-#nullable disable
     }
 }

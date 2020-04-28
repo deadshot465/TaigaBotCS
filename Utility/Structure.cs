@@ -66,4 +66,15 @@ namespace TaigaBotCS.Utility
         public string character;
         public string text;
     }
+
+    public struct CharacterObject
+    {
+        public string name;
+        public string description;
+        public int age;
+        public string birthday;
+        public string animal;
+        public string color;
+        public string emoteId;
+    }
 }

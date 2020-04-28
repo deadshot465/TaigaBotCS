@@ -38,8 +38,11 @@ namespace TaigaBotCS.Services
 
             var response = await _http.SendAsync(request);
 
-            if (response.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
+            if (response.StatusCode == HttpStatusCode.TooManyRequests)
+            {
                 await context.Channel.SendMessageAsync(cooldownMessage);
+                return null;
+            }
 
             return await response.Content.ReadAsStreamAsync();
         }
