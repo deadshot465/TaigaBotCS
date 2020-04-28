@@ -52,6 +52,7 @@ namespace TaigaBotCS.Utility
         public Dictionary<string, object> route;
         public Dictionary<string, object> valentine;
         public Dictionary<string, object> ship;
+        public Dictionary<string, object> pick;
     }
 
     public struct LocalizationObject

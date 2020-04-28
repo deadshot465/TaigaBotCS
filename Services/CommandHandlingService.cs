@@ -163,28 +163,10 @@ namespace TaigaBotCS.Services
             timestamps.Add(authorId, DateTime.Now);
             _ = Task.Delay((int)cooldownAmount).ContinueWith(_ => timestamps.Remove(authorId));
 
-            // Handle any captured error
-            if (result.Error.HasValue)
-            {
-                //HandleErrorAsync(context, result.Error.Value, command);
-                return;
-            }
-
             if (result.IsSuccess) return;
 
             Console.Error.WriteLine($"Error: {result}");
             await context.Channel.SendMessageAsync(responseText.texts.execution_failure);
-        }
-
-        public void HandleErrorAsync(ICommandContext context, CommandError error, string command)
-        {
-            var allCommands = typeof(CommandHandlingService).Assembly
-                .GetTypes()
-                .Where(t => t.GetCustomAttributes(typeof(Commands.Attributes.CommandAttribute), true).Length > 0);
-
-            var cmdClass = allCommands
-                .Where(t => t.GetCustomAttribute<Commands.Attributes.CommandAttribute>().Name == command)
-                .First().GetMethod("HandleErrorAsync").Invoke(null, new object[] { context, error });
         }
 
         public async Task SetPresenceAsync(SocketMessage rawMessage)

@@ -120,6 +120,10 @@ namespace TaigaBotCS.Commands
             await Context.Channel.SendFileAsync(response, "love.png");
         }
 
+        [Command("ship")]
+        public async Task ShipAsync(string userName1, string userName2, params string[] rest)
+            => await ShipAsync(userName1, userName2);
+
         public void SetMemberConfig(ulong userId)
         {
             if (_shipCommandTexts.ContainsKey(userId)) return;

@@ -38,6 +38,10 @@ namespace TaigaBotCS.Commands
             await Context.Channel.SendMessageAsync(embed: embed.Item1);
         }
 
+        [Command("route")]
+        public async Task RouteAsync(params string[] rest)
+            => await RouteAsync();
+
         public Tuple<Embed, string> GetEmbeddedMessage()
         {
             var memberConfig = Helper.GetMemberConfig(Context.User.Id);

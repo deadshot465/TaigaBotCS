@@ -47,6 +47,11 @@ namespace TaigaBotCS.Commands
                 await Context.Channel.SendMessageAsync(embed: embed.Item1);
         }
 
+        [Command("valentine")]
+        [Alias("lover")]
+        public async Task ValentineAsync(params string[] rest)
+            => await ValentineAsync();
+
         public Tuple<Embed, string> GetEmbeddedMessage()
         {
             var infos = _valentineCommandTexts[Context.User.Id]["infos"] as Dictionary<string, object>;
