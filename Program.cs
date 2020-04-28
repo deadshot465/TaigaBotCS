@@ -46,6 +46,7 @@ namespace TaigaBotCS
                 .AddSingleton<DiscordSocketClient>()
                 .AddSingleton<CommandService>()
                 .AddSingleton<CommandHandlingService>()
+                .AddSingleton<DialogService>()
                 .AddSingleton<HttpClient>()
                 .BuildServiceProvider();
         }

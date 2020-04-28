@@ -1,4 +1,7 @@
-﻿using Discord.WebSocket;
+﻿// Copyright(C) 2020 Tetsuki Syu
+// See Program.cs for the full notice.
+
+using Discord.WebSocket;
 using System;
 using System.Collections.Generic;
 using System.IO;

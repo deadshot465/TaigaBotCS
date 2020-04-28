@@ -1,4 +1,7 @@
-﻿using Discord;
+﻿// Copyright(C) 2020 Tetsuki Syu
+// See Program.cs for the full notice.
+
+using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,21 +33,17 @@ namespace TaigaBotCS.Services
             _client = services.GetRequiredService<DiscordSocketClient>();
             _services = services;
 
+            // Setting initial presence
             var presences = Helper.GetLocalization("en").texts.presence;
             var activity = presences[_rng.Next(0, presences.Length)];
             _client.SetActivityAsync(new Game(activity, ActivityType.Playing));
 
             _commands.CommandExecuted += CommandExecutedAsync;
             _client.MessageReceived += MessageReceivedAsync;
-            _client.MessageReceived += SetPresence;
-            _client.MessageReceived += WriteMemberConfigs;
+            _client.MessageReceived += SetPresenceAsync;
+            _client.MessageReceived += WriteMemberConfigsAsync;
+            _client.UserJoined += UserJoinedAsync;
             _stopWatch.Start();
-        }
-
-        public async Task ExecuteWithDelay(Action action, double timeOut)
-        {
-            await Task.Delay((int)timeOut);
-            action.Invoke();
         }
 
         public async Task InitializeAsync()
@@ -59,8 +58,7 @@ namespace TaigaBotCS.Services
 
             var authorId = message.Author.Id;
             var memberConfig = Helper.GetMemberConfig(authorId);
-            var responseText = (memberConfig?.Language == "en") ? Helper.GetLocalization("en")
-                : Helper.GetLocalization("jp");
+            var responseText = Helper.GetLocalization(memberConfig?.Language);
 
             // Don't do anything in venting channel
             var ignoreChannels = new[] { DotNetEnv.Env.GetString("VENTCHN") };
@@ -89,17 +87,16 @@ namespace TaigaBotCS.Services
             // Check if the user is on cooldown
             var now = DateTime.Now;
             var res = _cooldowns.TryGetValue(command, out var timestamps);
-            var attribute = typeof(CommandHandlingService).Assembly
-                .GetCustomAttributes()
-                .Where(attr =>
-                {
-                    return attr.GetType() == typeof(Commands.Attributes.CommandAttribute) &&
-                    ((Commands.Attributes.CommandAttribute)attr).Name == command;
-                })
-                .First() as Commands.Attributes.CommandAttribute;
+            var modules = _commands.Modules;
+            var allCommands = typeof(CommandHandlingService).Assembly
+                .GetTypes()
+                .Where(t => t.GetCustomAttributes(typeof(Commands.Attributes.CommandAttribute), true).Length > 0);
+            var attribute = allCommands
+                .Where(t => t.GetCustomAttribute<Commands.Attributes.CommandAttribute>().Name == command)
+                .First().GetCustomAttribute<Commands.Attributes.CommandAttribute>();
             var cooldownAmount = attribute.Cooldown * 1000.0;
 
-            if (timestamps.TryGetValue(message.Author.Id, out var startTime))
+            if (timestamps != null && timestamps.TryGetValue(message.Author.Id, out var startTime))
             {
                 var expirationTime = startTime.AddMilliseconds(cooldownAmount);
 
@@ -114,6 +111,7 @@ namespace TaigaBotCS.Services
                 }
             }
 
+            // Setting up member configurations
             if (!memberConfig.HasValue)
             {
                 Helper.AddMemberConfig(message.Author, message.Author.Id, "en");
@@ -133,8 +131,7 @@ namespace TaigaBotCS.Services
         {
             var authorId = context.Message.Author.Id;
             var memberConfig = Helper.GetMemberConfig(authorId);
-            var responseText = (memberConfig?.Language == "en") ? Helper.GetLocalization("en")
-                : Helper.GetLocalization("jp");
+            var responseText = Helper.GetLocalization(memberConfig?.Language);
 
             // If command not found, fail the command and return
             if (!commandInfo.IsSpecified)
@@ -164,9 +161,16 @@ namespace TaigaBotCS.Services
             var cooldownAmount = attribute.Cooldown * 1000.0;
 
             // Add the author to the cooldown timestamps,
-            // then remove the command after cooldown expires.
+            // then remove the command after cooldown expires
             timestamps.Add(authorId, DateTime.Now);
-            ExecuteWithDelay(() => timestamps.Remove(authorId), cooldownAmount);
+            _ = Task.Delay((int)cooldownAmount).ContinueWith(_ => timestamps.Remove(authorId));
+
+            // Handle any captured error
+            if (result.Error.HasValue)
+            {
+                HandleErrorAsync(context, result.Error.Value, command);
+                return;
+            }
 
             if (result.IsSuccess) return;
 
@@ -174,7 +178,18 @@ namespace TaigaBotCS.Services
             await context.Channel.SendMessageAsync(responseText.texts.execution_failure);
         }
 
-        public async Task SetPresence(SocketMessage rawMessage)
+        public void HandleErrorAsync(ICommandContext context, CommandError error, string command)
+        {
+            var allCommands = typeof(CommandHandlingService).Assembly
+                .GetTypes()
+                .Where(t => t.GetCustomAttributes(typeof(Commands.Attributes.CommandAttribute), true).Length > 0);
+
+            var cmdClass = allCommands
+                .Where(t => t.GetCustomAttribute<Commands.Attributes.CommandAttribute>().Name == command)
+                .First().GetMethod("HandleErrorAsync").Invoke(null, new object[] { context, error });
+        }
+
+        public async Task SetPresenceAsync(SocketMessage rawMessage)
         {
             if (_stopWatch.Elapsed.TotalMinutes >= 60)
             {
@@ -185,11 +200,30 @@ namespace TaigaBotCS.Services
 
                 await _client.SetActivityAsync(new Game(activity, ActivityType.Playing));
             }
-
-            await Task.CompletedTask;
         }
 
-        public async Task WriteMemberConfigs(SocketMessage rawMessage)
+        public async Task UserJoinedAsync(SocketGuildUser user)
+        {
+            var generalChannelIds = new[]
+            {
+                DotNetEnv.Env.GetString("GENCHN"),
+                DotNetEnv.Env.GetString("TESTGENCHN"),
+            };
+
+            foreach (var channelId in generalChannelIds)
+            {
+                var channel = user.Guild.GetTextChannel(ulong.Parse(channelId));
+                if (channel == null) continue;
+
+                var greetings = Helper.GetLocalization("en").texts.greetings;
+                var msg = greetings[_rng.Next(0, greetings.Length)]
+                    .Replace("{name}", $"<@{user.Id}>");
+
+                await channel.SendMessageAsync(msg);
+            }
+        }
+
+        public async Task WriteMemberConfigsAsync(SocketMessage rawMessage)
         {
             if (_stopWatch.Elapsed.TotalMinutes >= 60)
             {
@@ -197,8 +231,6 @@ namespace TaigaBotCS.Services
                 _stopWatch.Restart();
                 await Helper.WriteMemberConfigs();
             }
-
-            await Task.CompletedTask;
         }
     }
 }

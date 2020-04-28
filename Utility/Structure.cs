@@ -1,17 +1,34 @@
-﻿using Discord.WebSocket;
+﻿// Copyright(C) 2020 Tetsuki Syu
+// See Program.cs for the full notice.
+
+using Discord;
+using Discord.WebSocket;
+using System.Collections.Generic;
 
 namespace TaigaBotCS.Utility
 {
     public struct MemberConfig
     {
-        public SocketUser User;
+        private SocketUser _user;
+
+        public string AvatarID;
+        public string AvatarURL;
+        public bool IsBot;
+        public bool IsWebhook;
         public ulong UserID;
+        public string UserName;
         public string Language;
 
         public MemberConfig(SocketUser user, ulong userId, string language)
         {
-            User = user;
+            _user = user;
+
+            AvatarID = _user.AvatarId;
+            AvatarURL = _user.GetAvatarUrl(ImageFormat.Png, 2048);
+            IsBot = _user.IsBot;
+            IsWebhook = _user.IsWebhook;
             UserID = userId;
+            UserName = _user.Username;
             Language = language;
         }
     }
@@ -24,22 +41,29 @@ namespace TaigaBotCS.Utility
         public string[] failed_messages;
         public string cooldown;
         public string execution_failure;
-        public object cvt;
-        public object dialog;
-        public object enlarge;
-        public object help;
-        public object image;
-        public object info;
-        public object oracle;
-        public object ping;
-        public object route;
-        public object valentine;
-        public object ship;
+        public Dictionary<string, object> cvt;
+        public Dictionary<string, object> dialog;
+        public Dictionary<string, object> enlarge;
+        public Dictionary<string, object> help;
+        public Dictionary<string, object> image;
+        public Dictionary<string, object> info;
+        public Dictionary<string, object> oracle;
+        public Dictionary<string, object> ping;
+        public Dictionary<string, object> route;
+        public Dictionary<string, object> valentine;
+        public Dictionary<string, object> ship;
     }
 
     public struct LocalizationObject
     {
         public string lang;
         public GeneralTextObject texts;
+    }
+
+    public struct DialogObject
+    {
+        public string background;
+        public string character;
+        public string text;
     }
 }
