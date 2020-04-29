@@ -1,4 +1,7 @@
-﻿using Discord.Commands;
+﻿// Copyright(C) 2020 Tetsuki Syu
+// See Program.cs for the full notice.
+
+using Discord.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;

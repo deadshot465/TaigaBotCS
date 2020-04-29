@@ -1,4 +1,7 @@
-﻿using Discord;
+﻿// Copyright(C) 2020 Tetsuki Syu
+// See Program.cs for the full notice.
+
+using Discord;
 using Discord.Commands;
 using System;
 using System.Collections.Generic;
@@ -33,7 +36,9 @@ namespace TaigaBotCS.Commands
                 var embed = new EmbedBuilder
                 {
                     Color = new Color(0xfd9b3b),
-                    Description = mealData["strInstructions"].ToString(),
+                    Description = mealData["strInstructions"].ToString().Length >= 2048 ?
+                    mealData["strInstructions"].ToString().Substring(0, 2047) :
+                    mealData["strInstructions"].ToString(),
                     Title = mealData["strMeal"].ToString(),
                     ImageUrl = mealData["strMealThumb"].ToString(),
                     Url = mealData["strYoutube"].ToString(),

@@ -85,7 +85,10 @@ namespace TaigaBotCS.Services
                 Console.WriteLine($"Total: {total}");
 
                 if (total == 0)
+                {
                     await context.Channel.SendMessageAsync(noResultErrorMessage);
+                    return null;
+                }
 
                 // Limit to the first 25% pages.
                 var upperPageLimit = Math.Ceiling(totalPages * 0.25);

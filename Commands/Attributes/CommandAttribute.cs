@@ -35,7 +35,7 @@ namespace TaigaBotCS.Commands.Attributes
             Name = name;
             Category = category;
             Description = obj?["description"].ToString();
-            Usage = string.IsNullOrEmpty(usage) ? obj?["usage"].ToString() : usage;
+            Usage = usage ?? obj?["usage"].ToString();
             Aliases = aliases ?? null;
             Cooldown = cooldown;
         }
