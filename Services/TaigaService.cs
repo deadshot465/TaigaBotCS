@@ -36,7 +36,7 @@ namespace TaigaBotCS.Services
         private readonly double _randomReplyChance;
         private readonly double _specializedChance;
         private readonly List<RandomMessageObject> _randomMessages;
-        private readonly Regex _reactionRegex = new Regex(@"\d+");
+        private readonly Regex _reactionRegex = new Regex(@"<:\w+:\d+>");
         private readonly string[] _backgrounds = new[]
         {
             "bath", "beach", "cabin", "camp",
