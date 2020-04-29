@@ -63,11 +63,11 @@ This repo doesn't include compiled files, which usually are stored under the `bi
    TESTCHN = <Another personal test server's test channel id>
    VENTCHN = <Venting center channel id, as some channels are not meant for bot's random response>
    UNSPLASH_TOKEN = <This bot uses Unsplash's API to acquire certain images. This is the token of your Unsplash application>
-BOT_ID = <YOur Discord bot's ID. This is different from the token.>
-   MENTION_REACTION_CHANCE = <When Taiga is mentioned/pinged, the chance of he responding to the message.>
-   REACTION_CHANCE = <The probability of Taiga reacting to messages related to certain characters using emote/emojis.>
-   RDM_REPLY_CHANCE = <The probability of Taiga replying to messages related to certain characters.>
-   SPECIALIZED_CHANCE = <The probability of Taiga replying to messages related to certain characters using specialized messages.>
+   BOT_ID = <Your Discord bot's ID. This is different from the token>
+   MENTION_REACTION_CHANCE = <When Taiga is mentioned/pinged, the chance of he responding to the message>
+   REACTION_CHANCE = <The probability of Taiga reacting to messages related to certain characters using emote/emojis>
+   RDM_REPLY_CHANCE = <The probability of Taiga replying to messages related to certain characters>
+   SPECIALIZED_CHANCE = <The probability of Taiga replying to messages related to certain characters using specialized messages>
    ```
    
    **All placeholder texts should be replaced with your own content, without quotation marks (`"` and `'`) and greater than/less than (`<` and `>`) symbols.**
