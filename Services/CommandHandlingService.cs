@@ -21,6 +21,8 @@ namespace TaigaBotCS.Services
 
         private readonly CommandService _commands;
         private readonly DiscordSocketClient _client;
+        private readonly TaigaService _taigaService;
+        private readonly AdminService _adminService;
         private readonly IServiceProvider _services;
         private Dictionary<string, Dictionary<ulong, DateTime>> _cooldowns =
             new Dictionary<string, Dictionary<ulong, DateTime>>();
@@ -31,6 +33,8 @@ namespace TaigaBotCS.Services
         {
             _commands = services.GetRequiredService<CommandService>();
             _client = services.GetRequiredService<DiscordSocketClient>();
+            _taigaService = services.GetRequiredService<TaigaService>();
+            _adminService = services.GetRequiredService<AdminService>();
             _services = services;
 
             // Setting initial presence
@@ -56,13 +60,15 @@ namespace TaigaBotCS.Services
             if (!(rawMessage is SocketUserMessage message)) return;
             if (message.Source != MessageSource.User) return;
 
-            var authorId = message.Author.Id;
-            var memberConfig = Helper.GetMemberConfig(authorId);
-            var responseText = Helper.GetLocalization(memberConfig?.Language);
-
             // Don't do anything in venting channel
             var ignoreChannels = new[] { DotNetEnv.Env.GetString("VENTCHN") };
             if (ignoreChannels.Contains(message.Channel.Id.ToString())) return;
+
+            // Invoke Taiga service for reactions
+            _ = _taigaService.HandleMessageAsync(message);
+
+            // Admin commands
+            _ = _adminService.HandleAdminCommands(message);
 
             var argPos = 0;
             var botChannelId = DotNetEnv.Env.GetString("BOTCHN");
@@ -83,6 +89,10 @@ namespace TaigaBotCS.Services
             }
 
             var command = message.Content.Substring(argPos).Split(' ')[0];
+
+            var authorId = message.Author.Id;
+            var memberConfig = Helper.GetMemberConfig(authorId);
+            var responseText = Helper.GetLocalization(memberConfig?.Language);
 
             // Check if the user is on cooldown
             var now = DateTime.Now;
@@ -117,7 +127,7 @@ namespace TaigaBotCS.Services
             }
 
             // Setting up member configurations
-            if (!memberConfig.HasValue)
+            if (memberConfig == null)
                 Helper.AddMemberConfig(message.Author, message.Author.Id, "en");
             
             var context = new SocketCommandContext(_client, message);

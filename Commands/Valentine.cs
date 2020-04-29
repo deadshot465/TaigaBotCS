@@ -32,7 +32,7 @@ namespace TaigaBotCS.Commands
 
         [Command("valentine")]
         [Alias("lover")]
-        public async Task ValentineAsync()
+        public async Task ValentineAsync(params string[] discard)
         {
             SetMemberConfig(Context.User.Id);
             var infos = _valentineCommandTexts[Context.User.Id]["infos"] as Dictionary<string, object>;
@@ -46,11 +46,6 @@ namespace TaigaBotCS.Commands
             else
                 await Context.Channel.SendMessageAsync(embed: embed.Item1);
         }
-
-        [Command("valentine")]
-        [Alias("lover")]
-        public async Task ValentineAsync(params string[] rest)
-            => await ValentineAsync();
 
         public Tuple<Embed, string> GetEmbeddedMessage()
         {

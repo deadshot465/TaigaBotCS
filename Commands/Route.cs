@@ -30,17 +30,13 @@ namespace TaigaBotCS.Commands
         }
 
         [Command("route")]
-        public async Task RouteAsync()
+        public async Task RouteAsync(params string[] discard)
         {
             SetMemberConfig(Context.User.Id);
 
             var embed = GetEmbeddedMessage();
             await Context.Channel.SendMessageAsync(embed: embed.Item1);
         }
-
-        [Command("route")]
-        public async Task RouteAsync(params string[] rest)
-            => await RouteAsync();
 
         public Tuple<Embed, string> GetEmbeddedMessage()
         {

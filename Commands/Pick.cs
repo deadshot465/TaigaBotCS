@@ -20,6 +20,7 @@ namespace TaigaBotCS.Commands
             LengthTooShort
         }
 
+#pragma warning disable CS1998
         [Command("pick")]
         [Alias("choose")]
         public async Task PickAsync()

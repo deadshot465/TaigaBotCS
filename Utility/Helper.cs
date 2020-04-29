@@ -26,7 +26,7 @@ namespace TaigaBotCS.Utility
         private static Regex _userTag = new Regex(@"(\S.{0,30}\S)\s*#(\d{4})");
         private static Regex _discordIdRegex = new Regex(@"\d{17,20}");
 
-        public static MemberConfig AddMemberConfig(SocketUser user,
+        public static MemberConfig AddMemberConfig(IUser user,
             ulong userId, string language)
         {
             _memberConfigs.Add(new MemberConfig(user, userId, language));
@@ -36,7 +36,7 @@ namespace TaigaBotCS.Utility
         public static LocalizationObject GetLocalization(string langCode)
             => _localizationObjects.Find(obj => obj.lang == langCode);
 
-        public static MemberConfig? GetMemberConfig(ulong userId)
+        public static MemberConfig GetMemberConfig(ulong userId)
         {
             if (_memberConfigs.Exists(config => config.UserID == userId))
                 return _memberConfigs.Find(config => config.UserID == userId);
@@ -54,7 +54,7 @@ namespace TaigaBotCS.Utility
         {
             if (File.Exists(_configPath))
             {
-                var bytes = File.ReadAllBytes(_configPath);
+                var bytes = File.ReadAllText(_configPath);
                 _memberConfigs = JsonSerializer.Deserialize<List<MemberConfig>>(bytes);
                 Console.WriteLine("Member configs read successfully.");
             }

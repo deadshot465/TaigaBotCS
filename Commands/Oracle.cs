@@ -40,7 +40,7 @@ namespace TaigaBotCS.Commands
 
         [Command("oracle")]
         [Alias("fortune")]
-        public async Task OracleAsync()
+        public async Task OracleAsync(params string[] discard)
         {
             SetMemberConfig(Context.User.Id);
             var uiTexts = _oracleCommandTexts[Context.User.Id]["uis"] as Dictionary<string, object>;
@@ -84,11 +84,6 @@ namespace TaigaBotCS.Commands
 
             await Context.Channel.SendMessageAsync(embed: embed.Build());
         }
-
-        [Command("oracle")]
-        [Alias("fortune")]
-        public async Task OracleAsync(params string[] rest)
-            => await OracleAsync();
 
         public void SetMemberConfig(ulong userId)
         {

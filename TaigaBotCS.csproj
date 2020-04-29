@@ -19,9 +19,6 @@
     <None Update="storage\localizedStrings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="storage\memberConfigs.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="storage\oracles.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

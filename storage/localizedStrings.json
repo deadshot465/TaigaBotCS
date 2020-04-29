@@ -196,6 +196,18 @@
           "length_too_short": "This command requires at least two options: `pick <option1> | <option2>...`"
         },
         "result": "<:TaigaSmug:702210822310723614> I pick **{option}**!"
+      },
+      "meal": {
+        "description": "Get a random meal recipe",
+        "usage": "Run `meal` to get a random meal recipe.",
+        "errors": {
+        },
+        "uis": {
+          "category": "Category",
+          "area": "Area",
+          "footer": "Bon Appétit! Powered by TheMealDB.com."
+        },
+        "result": "Here you go!"
       }
     }
   },
@@ -399,6 +411,18 @@
           "length_too_short": "この命令は二つの引数は必要だ：`pick <option1> | <option2>...`"
         },
         "result": "<:TaigaSmug:702210822310723614> 俺が選んだのは**{option}**だ！"
+      },
+      "meal": {
+        "description": "乱数のレシピを取得する",
+        "usage": "`meal`を実行し、乱数のレシピを取得する。",
+        "errors": {
+        },
+        "uis": {
+          "category": "種類",
+          "area": "エリア",
+          "footer": "どうぞお召し上がりくださいませ！"
+        },
+        "result": "ほらー"
       }
     }
   }

@@ -13,7 +13,7 @@ namespace TaigaBotCS.Commands
     public class Ping : ModuleBase<SocketCommandContext>
     {
         [Command("ping")]
-        public async Task PingAsync(params string[] rest)
+        public async Task PingAsync(params string[] discard)
         {
             var memberConfig = Helper.GetMemberConfig(Context.User.Id);
             var responseText = Helper.GetLocalization(memberConfig?.Language);

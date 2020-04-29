@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection.Metadata;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TaigaBotCS.Utility;
@@ -53,9 +52,9 @@ namespace TaigaBotCS.Services
 
             _taigaId = ulong.Parse(DotNetEnv.Env.GetString("BOT_ID"));
             _mentionReactionChance = DotNetEnv.Env.GetDouble("MENTION_REACTION_CHANCE");
-            _reactionChance = DotNetEnv.Env.GetDouble("REACTION_CHANCE");
-            _randomReplyChance = DotNetEnv.Env.GetDouble("RDM_REPLY_CHANCE");
-            _specializedChance = DotNetEnv.Env.GetDouble("SPECIALIZED_CHANCE");
+            _reactionChance = DotNetEnv.Env.GetInt("REACTION_CHANCE");
+            _randomReplyChance = DotNetEnv.Env.GetInt("RDM_REPLY_CHANCE");
+            _specializedChance = DotNetEnv.Env.GetInt("SPECIALIZED_CHANCE");
 
             var rawJson = File.ReadAllText(RANDOM_MESSAGE_PATH);
             _randomMessages = Utf8Json.JsonSerializer
@@ -68,6 +67,7 @@ namespace TaigaBotCS.Services
             SetMemberConfig(message.Author.Id);
             _ = HandleMentions(message);
             _ = HandleReactions(message);
+            _ = HandleReplies(message);
         }
 
         /// <summary>
@@ -102,7 +102,15 @@ namespace TaigaBotCS.Services
                 if (!message.Content.ToLower().Contains(msgObj.keyword)) continue;
 
                 var reaction = msgObj.reactions[_rng.Next(0, msgObj.reactions.Length)];
-                await message.AddReactionAsync(Emote.Parse(reaction));
+
+                if (_reactionRegex.IsMatch(reaction))
+                    await message.AddReactionAsync(Emote.Parse(reaction));
+                else
+                {
+                    var emoji = new Emoji(reaction);
+                    await message.AddReactionAsync(emoji);
+                }
+
                 break;
             }
         }
@@ -164,7 +172,17 @@ namespace TaigaBotCS.Services
             }
             else
             {
+                foreach (var msgObj in _randomMessages)
+                {
+                    if (!content.Contains(msgObj.keyword)) continue;
 
+                    var responses = _randomMessageUserLang[message.Author.Id] == "en" ?
+                        msgObj.messages["en"] : msgObj.messages["jp"];
+
+                    var msg = responses[_rng.Next(0, responses.Length)];
+                    await message.Channel.SendMessageAsync(msg);
+                    break;
+                }
             }
         }
 

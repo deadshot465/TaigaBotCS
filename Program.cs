@@ -72,6 +72,8 @@ namespace TaigaBotCS
                 .AddSingleton<ImageService>()
                 .AddSingleton<ShipService>()
                 .AddSingleton<TaigaService>()
+                .AddSingleton<AdminService>()
+                .AddSingleton<MealService>()
                 .AddSingleton<HttpClient>()
                 .BuildServiceProvider();
         }

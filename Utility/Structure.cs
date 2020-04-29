@@ -2,15 +2,12 @@
 // See Program.cs for the full notice.
 
 using Discord;
-using Discord.WebSocket;
 using System.Collections.Generic;
 
 namespace TaigaBotCS.Utility
 {
-    public struct MemberConfig
+    public class MemberConfig
     {
-        private SocketUser _user;
-
         public string AvatarID;
         public string AvatarURL;
         public bool IsBot;
@@ -19,16 +16,26 @@ namespace TaigaBotCS.Utility
         public string UserName;
         public string Language;
 
-        public MemberConfig(SocketUser user, ulong userId, string language)
+        public MemberConfig(string avatarId, string avatarUrl, bool isBot, bool isWebhook,
+            ulong userId, string userName, string language)
         {
-            _user = user;
-
-            AvatarID = _user.AvatarId;
-            AvatarURL = _user.GetAvatarUrl(ImageFormat.Png, 2048);
-            IsBot = _user.IsBot;
-            IsWebhook = _user.IsWebhook;
+            AvatarID = avatarId;
+            AvatarURL = avatarUrl;
+            IsBot = isBot;
+            IsWebhook = isWebhook;
             UserID = userId;
-            UserName = _user.Username;
+            UserName = userName;
+            Language = language;
+        }
+
+        public MemberConfig(IUser user, ulong userId, string language)
+        {
+            AvatarID = user.AvatarId;
+            AvatarURL = user.GetAvatarUrl(ImageFormat.Png, 2048);
+            IsBot = user.IsBot;
+            IsWebhook = user.IsWebhook;
+            UserID = userId;
+            UserName = user.Username;
             Language = language;
         }
     }
@@ -53,6 +60,7 @@ namespace TaigaBotCS.Utility
         public Dictionary<string, object> valentine;
         public Dictionary<string, object> ship;
         public Dictionary<string, object> pick;
+        public Dictionary<string, object> meal;
     }
 
     public struct LocalizationObject

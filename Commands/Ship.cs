@@ -50,6 +50,7 @@ namespace TaigaBotCS.Commands
             _shipMessages = Utf8Json.JsonSerializer.Deserialize<List<ShipMessage>>(rawShipMessages);
         }
 
+#pragma warning disable CS1998
         [Command("ship")]
         public async Task ShipAsync()
             => _ = HandleErrorAsync(ShipError.LengthTooShort, null);
