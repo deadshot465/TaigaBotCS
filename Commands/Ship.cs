@@ -85,7 +85,7 @@ namespace TaigaBotCS.Commands
             IGuildUser target2 = null;
             
             var searchResult = Helper.SearchUser(Context.Guild, userName1);
-            if (searchResult != null)
+            if (searchResult != null && searchResult.Length > 0)
                 target1 = searchResult[0];
             else
             {
@@ -206,12 +206,13 @@ namespace TaigaBotCS.Commands
             var (score, scoreMessage) = new Tuple<int, string>(10000,
                 $"What are you talking about? {first} and {second} of course are the cutest two!");
 
-            var response = await ShipService.GetShipAsync(_kouEmotePath, _hiroEmotePath);
+            var response = await ShipService.GetShipAsync(first == _kouName ? _kouEmotePath : _hiroEmotePath,
+                second == _hiroName ? _hiroEmotePath : _kouEmotePath);
 
             var embed = new EmbedBuilder
             {
-                Title = infos["title"].ToString().Replace("{user1}", first == _kouName ? first : second)
-                .Replace("{user2}", second == _hiroName ? second : first),
+                Title = infos["title"].ToString().Replace("{user1}", (first == _kouName) ? _kouName : _hiroName)
+                .Replace("{user2}", (second == _hiroName) ? _hiroName : _kouName),
                 Fields = new List<EmbedFieldBuilder>
                 {
                     {
