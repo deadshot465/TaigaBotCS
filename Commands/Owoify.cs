@@ -65,7 +65,9 @@ namespace TaigaBotCS.Commands
 
             var result = owoifyCmd["result"].ToString()
                 .Replace("{author}", Context.User.Username)
-                .Replace("{text}", string.Join(' ', msg));
+                .Replace("{text}", string.Join(' ', msg)
+                .Replace("`", "\\`")
+                .Replace("*", "\\*"));
 
             await Context.Channel.SendMessageAsync(result);
         }
