@@ -11,7 +11,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Owoify-cs">
-      <HintPath>..\Owoify-cs\bin\Release\netcoreapp3.1\Owoify-cs.dll</HintPath>
+      <HintPath>lib\Owoify-cs.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
