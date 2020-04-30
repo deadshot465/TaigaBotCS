@@ -4,3 +4,4 @@ obj/
 .env
 .env_temp
 .env_hiro
+storage/memberConfigs.json
