@@ -252,15 +252,15 @@
         "{name} As I was saying..."
       ],
       "random_responses": [
-        "そう、そういうこと！",
-        "アホか…",
-        "早くしろ！",
-        "なんとバカバカしいこと…",
-        "黙れ！",
-        "そう簡単にできるとは思わないでよ。",
-        "負け犬！",
-        "無能だ、てめぇは！",
-        "さっさと消えてしまえ！"
+        "そう、そういうこと！ (Yeah, that's right!)",
+        "アホか… (Dummy...)",
+        "早くしろ！ (Hurry up!)",
+        "なんとバカバカしいこと… (What the actual fuck?)",
+        "黙れ！ (Shut up!)",
+        "そう簡単にできるとは思わないでよ。 (Don't even think it's easy.)",
+        "負け犬！ (Loser!)",
+        "無能だ、てめぇは！ (You're useless!)",
+        "さっさと消えてしまえ！ (Get away from my sight, now!)"
       ],
       "failed_messages": [
         "馬鹿な…",

@@ -44,8 +44,8 @@ namespace TaigaBotCS.Services
         };
 
         private Random _rng = new Random();
-        private Dictionary<ulong, string> _randomMessageUserLang
-            = new Dictionary<ulong, string>();
+        private Dictionary<ulong, MemberConfig> _randomMessageMemberConfig
+            = new Dictionary<ulong, MemberConfig>();
 
         public TaigaService(IServiceProvider services)
         {
@@ -85,7 +85,7 @@ namespace TaigaBotCS.Services
             if (!HitOrMiss(_mentionReactionChance)) return;
 
             var msgObj = _randomMessages.Where(msg => msg.keyword == "taiga").First();
-            var responses = _randomMessageUserLang[message.Author.Id] == "en" ?
+            var responses = _randomMessageMemberConfig[message.Author.Id].Language == "en" ?
                     msgObj.messages["en"] : msgObj.messages["jp"];
             await message.Channel.SendMessageAsync(responses[_rng.Next(0, responses.Length)]);
         }
@@ -179,7 +179,7 @@ namespace TaigaBotCS.Services
                 {
                     if (!content.Contains(msgObj.keyword)) continue;
 
-                    var responses = _randomMessageUserLang[message.Author.Id] == "en" ?
+                    var responses = _randomMessageMemberConfig[message.Author.Id].Language == "en" ?
                         msgObj.messages["en"] : msgObj.messages["jp"];
 
                     var msg = responses[_rng.Next(0, responses.Length)];
@@ -194,11 +194,9 @@ namespace TaigaBotCS.Services
 
         public void SetMemberConfig(ulong userId)
         {
-            if (_randomMessageUserLang.ContainsKey(userId)) return;
+            if (_randomMessageMemberConfig.ContainsKey(userId)) return;
 
-            var responseText = Helper
-                .GetLocalization(Helper.GetMemberConfig(userId)?.Language);
-            _randomMessageUserLang[userId] = responseText.lang;
+            _randomMessageMemberConfig[userId] = Helper.GetMemberConfig(userId);
         }
     }
 }

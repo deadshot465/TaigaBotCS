@@ -120,8 +120,8 @@ namespace TaigaBotCS.Commands
 
             var embed = new EmbedBuilder
             {
-                Title = infos["title"].ToString().Replace("{user1}", user1.Username)
-                .Replace("{user2}", user2.Username),
+                Title = infos["title"].ToString().Replace("{user1}", user1.Nickname ?? user1.Username)
+                .Replace("{user2}", user2.Nickname ?? user2.Username),
                 Fields = new List<EmbedFieldBuilder>
                 {
                     {
