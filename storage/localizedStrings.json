@@ -208,6 +208,15 @@
           "footer": "Bon Appétit! Powered by TheMealDB.com."
         },
         "result": "Here you go!"
+      },
+      "owoify": {
+        "description": "This command will owoify your text",
+        "usage": "Run `owoify <text>` or `owoify <intensity> <text>` to owoify any text!\nIntensities available are `easy` (default), `medium`, and `hard`.",
+        "errors": {
+          "length_too_short": "...There's nothing to owoify, you dummy.",
+          "length_too_long": "<:TaigaUneasy2:700006812673638500> Even idiocy has its limit. Same goes for owoification as well. I won't do any text that is more than 1000 characters."
+        },
+        "result": "OwO-ified for {author}~!\n\n{text}"
       }
     }
   },
@@ -423,6 +432,15 @@
           "footer": "どうぞお召し上がりくださいませ！"
         },
         "result": "ほらー"
+      },
+      "owoify": {
+        "description": "メッセージをOwO化する",
+        "usage": "`owoify <メッセージ>`もしくは`owoify <レベル> <メッセージ>`を実行し、メッセージをOwO化する！\n可能のレベルは`easy`（デフォルト）、`medium`と`hard`。",
+        "errors": {
+          "length_too_short": "メッセージがないだろう！OwO化したくてもちゃんとメッセージを入力しろ！",
+          "length_too_long": "<:TaigaUneasy2:700006812673638500> 馬鹿馬鹿しいことにもほどがあるだろう。OwO化もそうだ。1,000文字数制限を超えたメッセージはOwO化しねぇ。"
+        },
+        "result": "ほらー{author}のOwO化したメッセージ～！\n\n{text}"
       }
     }
   }
