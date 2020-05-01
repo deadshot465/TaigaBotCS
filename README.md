@@ -1,5 +1,7 @@
 # TaigaBot
 
+[![Build Status](https://travis-ci.com/deadshot465/TaigaBotCS.svg?branch=master)](https://travis-ci.com/github/deadshot465/TaigaBotCS)
+
 Taiga bot is a bot that aims to provide interactive experiences to the users in a private-owned Discord server for fans of Taiga, who is a character from a yaoi visual novel Camp Buddy by BLits.
 
 Taiga bot is based on and is a modified version of [yuuto-bot](https://github.com/Yuuto-Project/yuuto-bot), which is a community-driven project of Offical Camp Buddy Fan Server members, under GNU GPLv3 license. Yuuto bot's idea came from an increasing number of tech-oriented campers in the official fan server. While Yuuto is made by the community and for the community, the dialog choices and some design decisions are not meant for a specific character's fan server such as Taiga's fan server. Therefore, Taiga bot, while based on Yuuto bot and retains most features from Yuuto bot, aims to solve this problem and tailor to Taiga fan server's needs.
