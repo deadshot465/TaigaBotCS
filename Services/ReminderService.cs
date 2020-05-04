@@ -44,7 +44,7 @@ namespace TaigaBotCS.Services
                 }
             }
 
-            if ((DateTime.Now - _lastTime).TotalMinutes >= 1)
+            if ((DateTime.Now - _lastTime).TotalMinutes >= 10)
             {
                 Console.WriteLine("Writing reminders...");
                 WriteReminders();
