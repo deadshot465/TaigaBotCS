@@ -29,24 +29,16 @@ namespace TaigaBotCS.Commands
             SetMemberConfig(Context.User.Id);
             var helpErrors = _helpCommandTexts[Context.User.Id]["errors"] as Dictionary<string, object>;
 
-            if (commandName == "list")
+            var allCommands = GetAllCommands();
+
+            string[] categories = new[] { "fun", "info", "list", "util" };
+
+            if (categories.Contains(commandName))
             {
-                var commandTexts = GetAllCommands()
-                .Select(t =>
-                {
-                    var attr = t.GetCustomAttribute<Attributes.CommandAttribute>();
-                    return $"- **{attr.Category}:** `{attr.Name}`: *{attr.Description}*";
-                });
-                var commandListText = string.Join("\n", commandTexts);
-
-                var msg = helpErrors["show_list"].ToString()
-                    .Replace("{commandLists}", commandListText);
-
-                await Context.Channel.SendMessageAsync(msg);
+                await Context.Channel.SendMessageAsync(ShowCommandLists(commandName));
                 return;
             }
 
-            var allCommands = GetAllCommands();
             var commandExist = allCommands
                 .Where(t =>
                 {
@@ -56,6 +48,7 @@ namespace TaigaBotCS.Commands
 
                 })
                 .Count() > 0;
+
             if (!commandExist)
             {
                 await Context.Channel.SendMessageAsync(helpErrors["no_command"].ToString());
@@ -64,7 +57,7 @@ namespace TaigaBotCS.Commands
 
             Attributes.CommandAttribute commandAttribute = null;
 
-            foreach (var t in GetAllCommands())
+            foreach (var t in allCommands)
             {
                 var _type = t.UnderlyingSystemType;
                 var attr = t.GetCustomAttribute<Attributes.CommandAttribute>();
@@ -116,6 +109,47 @@ namespace TaigaBotCS.Commands
 
             foreach (var cmd in allCommands)
                 yield return cmd;
+        }
+
+        private string ShowCommandLists(string category)
+        {
+            var helpErrors = _helpCommandTexts[Context.User.Id]["errors"] as Dictionary<string, object>;
+
+            var allCommands = GetAllCommands();
+            IEnumerable<string> commandTexts;
+
+            if (category == "list")
+            {
+                commandTexts = allCommands
+                    .Select(t =>
+                    {
+                        var attr = t.GetCustomAttribute<Attributes.CommandAttribute>();
+                        return $"- **{attr.Category}:** `{attr.Name}`: *{attr.Description}*";
+                    });
+            }
+            else
+            {
+                commandTexts = allCommands
+                    .Where(t =>
+                    {
+                        var attr = t.GetCustomAttribute<Attributes.CommandAttribute>();
+                        return attr.Category == category;
+                    })
+                    .Select(t =>
+                    {
+                        var attr = t.GetCustomAttribute<Attributes.CommandAttribute>();
+                        return $"- `{attr.Name}`: *{attr.Description}*";
+                    });
+            }
+
+            var commandListText = string.Join("\n", commandTexts);
+
+            var msg = category == "list" ?
+                helpErrors["show_list"].ToString() :
+                helpErrors["show_category"].ToString()
+                .Replace("{category}", category);
+
+            return msg.Replace("{commandLists}", commandListText);
         }
     }
 }

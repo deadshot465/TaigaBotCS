@@ -95,7 +95,8 @@
         "usage": "Run `help <command>` to get usage instructions on `<command>`, if it exists. Run `help list` to list possible commands.",
         "errors": {
           "show_list": "Here is a list of all commands and their descriptions:\n{commandLists}",
-          "no_command": "There is no such command in my journal."
+          "no_command": "There is no such command in my journal.",
+          "show_category": "Here is a list of all `{category}` commands and their descriptions.\n{commandLists}"
         },
         "result": "**Category:** `{category}`\n**Usage For Command:** `{name}`\n{usage}{aliases}"
       },
@@ -110,7 +111,7 @@
         },
         "result": "Here is your image for {keyword}"
       },
-      "info": {
+      "about": {
         "description": "Shows information about the Taiga bot",
         "usage": "Show information about the Taiga bot.",
         "errors": {
@@ -217,6 +218,17 @@
           "length_too_long": "<:TaigaUneasy2:700006812673638500> Even idiocy has its limit. Same goes for owoification as well. I won't do any text that is more than 1000 characters."
         },
         "result": "OwO-ified for {author}~!\n\n{text}"
+      },
+      "remind": {
+        "description": "This command will make Taiga remind you in a specific time.",
+        "usage": "Run `remind in <amount> <unit> <message>` to let Taiga remind you after a period of time has passed. Run `remind on <date> <message>` to let Taiga remind you on 0:00AM of a specific date.\nPossible units are: `{units}`.\nThe format for a date is: `YYYY-MM-DD, YYYY/MM/DD, YYYY.MM.DD`.",
+        "errors": {
+          "length_too_short": "<:TaigaAngry:699705315519889479> You gotta give me a period of time or a date, and a message to make me do my work, you dummy.",
+          "no_such_operation": "Available operations/prepositions are `in <amount> <unit> <message>` and `on <date> <message>`. Available units are: `{units}`.",
+          "past_time": "I'm not a time machine. You can't just tell me to remind you in the past, dweeb.",
+          "no_message": "<:TaigaAngry:699705315519889479> There's no message at all. What the actual fuck?"
+        },
+        "result": "It's {time} in my place, so I will remind you on {dueTime}."
       }
     }
   },
@@ -319,7 +331,8 @@
         "usage": "`help <命令>`を実行し、`<命令>`の使い方を取得する（もしその命令が存在するなら）。`help list`を実行すると、可能の命令リストを取得できる",
         "errors": {
           "show_list": "以下はすべての命令のリストとそれぞれの説明：\n{commandLists}",
-          "no_command": "俺の辞書にはそういう命令が書いてないぞ"
+          "no_command": "俺の辞書にはそういう命令が書いてないぞ",
+          "show_category": "以下は`{category}`の命令リストとそれぞれの説明：\n{commandLists}"
         },
         "result": "**種類：** `{category}`\n**使い方：** `{name}`\n{usage}{aliases}"
       },
@@ -334,7 +347,7 @@
         },
         "result": "これはお前が探している{keyword}の画像だ。"
       },
-      "info": {
+      "about": {
         "description": "赤虎たいがの情報を表示する",
         "usage": "俺様の情報を表示する。",
         "errors": {
@@ -441,6 +454,17 @@
           "length_too_long": "<:TaigaUneasy2:700006812673638500> 馬鹿馬鹿しいことにもほどがあるだろう。OwO化もそうだ。1,000文字数制限を超えたメッセージはOwO化しねぇ。"
         },
         "result": "ほらー{author}のOwO化したメッセージ～！\n\n{text}"
+      },
+      "remind": {
+        "description": "特定の日付もしくは時間にたいがに通知させる",
+        "usage": "`remind in <長さ> <単位> <メッセージ>`を実行し、時間が経ったらたいがに君を通知させる。`remind on <日付> <メッセージ>`を実行し、指定の日付にたいがに通知させる。\n可能の単位は`{units}`。\n日付のフォーマットは`YYYY-MM-DD, YYYY/MM/DD`もしくは`YYYY.MM.DD`だ。",
+        "errors": {
+          "length_too_short": "<:TaigaAngry:699705315519889479> 時間もしくは日付とメッセージがなかったらどうするつもり？アホか。",
+          "no_such_operation": "可能の操作は`in <長さ> <単位> <メッセージ>`と`on <日付> <メッセージ>`。可能の単位は`{units}`だ。",
+          "past_time": "タイムマシンじゃねぇよ。過去の時間に通知することができるわけねぇだろう、馬鹿野郎！",
+          "no_message": "<:TaigaAngry:699705315519889479> メッセージがないだろう！"
+        },
+        "result": "俺のところ現在は{time}だから、{dueTime}にお前を通知するんだ。"
       }
     }
   }

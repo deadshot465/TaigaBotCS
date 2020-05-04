@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace TaigaBotCS.Commands
 {
-    [Attributes.Command("info", "info", null, new string[] { "credits", "bot" })]
-    public class Info : ModuleBase<SocketCommandContext>
+    [Attributes.Command("about", "info", null, new string[] { "credits", "bot" })]
+    public class About : ModuleBase<SocketCommandContext>
     {
-        [Command("info")]
+        [Command("about")]
         [Alias("credits", "bot")]
-        public async Task InfoAsync(params string[] discard)
+        public async Task AboutAsync(params string[] discard)
         {
             var embed = new EmbedBuilder
             {

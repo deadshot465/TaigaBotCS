@@ -53,7 +53,7 @@ namespace TaigaBotCS.Utility
         public Dictionary<string, object> enlarge;
         public Dictionary<string, object> help;
         public Dictionary<string, object> image;
-        public Dictionary<string, object> info;
+        public Dictionary<string, object> about;
         public Dictionary<string, object> oracle;
         public Dictionary<string, object> ping;
         public Dictionary<string, object> route;
@@ -62,6 +62,7 @@ namespace TaigaBotCS.Utility
         public Dictionary<string, object> pick;
         public Dictionary<string, object> meal;
         public Dictionary<string, object> owoify;
+        public Dictionary<string, object> remind;
     }
 
     public struct LocalizationObject

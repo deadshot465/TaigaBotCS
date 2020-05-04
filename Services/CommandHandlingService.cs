@@ -23,6 +23,7 @@ namespace TaigaBotCS.Services
         private readonly DiscordSocketClient _client;
         private readonly TaigaService _taigaService;
         private readonly AdminService _adminService;
+        private readonly ReminderService _reminderService;
         private readonly IServiceProvider _services;
         private Dictionary<string, Dictionary<ulong, DateTime>> _cooldowns =
             new Dictionary<string, Dictionary<ulong, DateTime>>();
@@ -35,6 +36,7 @@ namespace TaigaBotCS.Services
             _client = services.GetRequiredService<DiscordSocketClient>();
             _taigaService = services.GetRequiredService<TaigaService>();
             _adminService = services.GetRequiredService<AdminService>();
+            _reminderService = services.GetRequiredService<ReminderService>();
             _services = services;
 
             // Setting initial presence
@@ -47,6 +49,7 @@ namespace TaigaBotCS.Services
             _client.MessageReceived += SetPresenceAsync;
             _client.MessageReceived += WriteMemberConfigsAsync;
             _client.UserJoined += UserJoinedAsync;
+            _client.LatencyUpdated += LatencyUpdateAsync;
             _stopWatch.Start();
         }
 
@@ -220,6 +223,26 @@ namespace TaigaBotCS.Services
                 Console.WriteLine("Writing member configs");
                 _stopWatch.Restart();
                 await Helper.WriteMemberConfigs();
+            }
+        }
+
+        public async Task LatencyUpdateAsync(int old, int value)
+        {
+            foreach (var reminder in _reminderService.RemindUser())
+            {
+                var channel = _client
+                    .GetChannel(ulong.Parse(DotNetEnv.Env.GetString("BOTCHN"))) as ITextChannel;
+                var user = await channel.GetUserAsync(reminder.Item1);
+
+                if (channel == null || user == null)
+                {
+                    channel = _client
+                    .GetChannel(ulong.Parse(DotNetEnv.Env.GetString("TESTCHN"))) as ITextChannel;
+                    user = await channel.GetUserAsync(reminder.Item1);
+                }
+                
+                await channel.SendMessageAsync($"<@{reminder.Item1}> {reminder.Item2}");
+                await user.SendMessageAsync(reminder.Item2);
             }
         }
     }
