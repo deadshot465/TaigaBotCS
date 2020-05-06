@@ -232,17 +232,20 @@ namespace TaigaBotCS.Services
             {
                 var channel = _client
                     .GetChannel(ulong.Parse(DotNetEnv.Env.GetString("BOTCHN"))) as ITextChannel;
-                var user = await channel.GetUserAsync(reminder.Item1);
+                var user = (channel != null) ? await channel.GetUserAsync(reminder.Item1) : null;
 
                 if (channel == null || user == null)
                 {
                     channel = _client
                     .GetChannel(ulong.Parse(DotNetEnv.Env.GetString("TESTCHN"))) as ITextChannel;
-                    user = await channel.GetUserAsync(reminder.Item1);
+                    user = (channel != null) ? await channel.GetUserAsync(reminder.Item1) : null;
                 }
                 
-                await channel.SendMessageAsync($"<@{reminder.Item1}> {reminder.Item2}");
-                await user.SendMessageAsync(reminder.Item2);
+                if (channel != null && user != null)
+                {
+                    await channel.SendMessageAsync($"<@{reminder.Item1}> {reminder.Item2}");
+                    await user.SendMessageAsync(reminder.Item2);
+                }
             }
         }
     }

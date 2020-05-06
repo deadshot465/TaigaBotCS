@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright(C) 2020 Tetsuki Syu
+// See Program.cs for the full notice.
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Utf8Json;

@@ -1,12 +1,14 @@
 ﻿// Copyright(C) 2020 Tetsuki Syu
 // See Program.cs for the full notice.
 
+using Discord;
 using Discord.Commands;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Remoting;
 using System.Threading.Tasks;
 using TaigaBotCS.Interfaces;
 using TaigaBotCS.Utility;
@@ -35,7 +37,11 @@ namespace TaigaBotCS.Commands
 
             if (categories.Contains(commandName))
             {
-                await Context.Channel.SendMessageAsync(ShowCommandLists(commandName));
+                var result = ShowCommandLists(commandName);
+                if (result is Embed embed)
+                    await Context.Channel.SendMessageAsync(embed: embed);
+                else
+                    await Context.Channel.SendMessageAsync(result);
                 return;
             }
 
@@ -111,25 +117,63 @@ namespace TaigaBotCS.Commands
                 yield return cmd;
         }
 
-        private string ShowCommandLists(string category)
+        private dynamic ShowCommandLists(string category)
         {
             var helpErrors = _helpCommandTexts[Context.User.Id]["errors"] as Dictionary<string, object>;
-
-            var allCommands = GetAllCommands();
-            IEnumerable<string> commandTexts;
+            var helpInfos = _helpCommandTexts[Context.User.Id]["infos"] as Dictionary<string, object>;
 
             if (category == "list")
             {
-                commandTexts = allCommands
+                var embed = new EmbedBuilder
+                {
+                    Author = new EmbedAuthorBuilder
+                    {
+                        IconUrl = Context.User.GetAvatarUrl(ImageFormat.Png),
+                        Name = Context.User.Username
+                    },
+                    Color = new Color(0xe81615),
+                    Description = helpInfos["show_list"].ToString()
+                };
+
+                var allCommands = GetAllCommands()
                     .Select(t =>
                     {
                         var attr = t.GetCustomAttribute<Attributes.CommandAttribute>();
-                        return $"- **{attr.Category}:** `{attr.Name}`: *{attr.Description}*";
+                        return (attr.Category, attr.Name);
+                    })
+                    .GroupBy(element => element.Category, element => element.Name,
+                    (_category, _names) => new
+                    {
+                        Category = (helpInfos[_category] as List<object>).Cast<string>().ElementAt(1),
+                        Commands = string.Join(' ', _names.Select(name =>
+                        {
+                            return '`' + name + '`';
+                        })),
+                        Icon = (helpInfos[_category] as List<object>).Cast<string>().ElementAt(0)
                     });
+
+                var inline = true;
+                for (var i = 0; i < allCommands.Count(); i++)
+                {
+                    embed.AddField(new EmbedFieldBuilder
+                    {
+                        IsInline = inline,
+                        Name = allCommands.ElementAt(i).Icon + allCommands.ElementAt(i).Category,
+                        Value = allCommands.ElementAt(i).Commands
+                    });
+
+                    if (i != 0 && i % 3 == 0)
+                        inline = false;
+                    else
+                        inline = true;
+                }
+
+                return embed.Build();
             }
             else
             {
-                commandTexts = allCommands
+                var allCommands = GetAllCommands();
+                var commandTexts = allCommands
                     .Where(t =>
                     {
                         var attr = t.GetCustomAttribute<Attributes.CommandAttribute>();
@@ -140,16 +184,13 @@ namespace TaigaBotCS.Commands
                         var attr = t.GetCustomAttribute<Attributes.CommandAttribute>();
                         return $"- `{attr.Name}`: *{attr.Description}*";
                     });
-            }
 
-            var commandListText = string.Join("\n", commandTexts);
+                var commandListText = string.Join("\n", commandTexts);
+                var msg = helpInfos["show_category"].ToString()
+                    .Replace("{category}", category);
 
-            var msg = category == "list" ?
-                helpErrors["show_list"].ToString() :
-                helpErrors["show_category"].ToString()
-                .Replace("{category}", category);
-
-            return msg.Replace("{commandLists}", commandListText);
+                return msg.Replace("{commandLists}", commandListText);
+            }    
         }
     }
 }

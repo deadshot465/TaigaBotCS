@@ -94,8 +94,22 @@
         "description": "Get the usage of any other command",
         "usage": "Run `help <command>` to get usage instructions on `<command>`, if it exists. Run `help list` to list possible commands.",
         "errors": {
-          "show_list": "Here is a list of all commands and their descriptions:\n{commandLists}",
-          "no_command": "There is no such command in my journal.",
+          "no_command": "There is no such command in my journal."
+        },
+        "infos": {
+          "fun": [
+            "🎮",
+            "Fun"
+          ],
+          "util": [
+            "🔧",
+            "Utilities"
+          ],
+          "info": [
+            "ℹ️",
+            "Information"
+          ],
+          "show_list": "Here is a list of all commands and their descriptions.",
           "show_category": "Here is a list of all `{category}` commands and their descriptions.\n{commandLists}"
         },
         "result": "**Category:** `{category}`\n**Usage For Command:** `{name}`\n{usage}{aliases}"
@@ -330,8 +344,22 @@
         "description": "他の命令の説明を取得する",
         "usage": "`help <命令>`を実行し、`<命令>`の使い方を取得する（もしその命令が存在するなら）。`help list`を実行すると、可能の命令リストを取得できる",
         "errors": {
-          "show_list": "以下はすべての命令のリストとそれぞれの説明：\n{commandLists}",
-          "no_command": "俺の辞書にはそういう命令が書いてないぞ",
+          "no_command": "俺の辞書にはそういう命令が書いてないぞ"
+        },
+        "infos": {
+          "fun": [
+            "🎮",
+            "面白い"
+          ],
+          "util": [
+            "🔧",
+            "ユーティリティ"
+          ],
+          "info": [
+            "ℹ️",
+            "インフォメーション"
+          ],
+          "show_list": "以下はすべての命令のリストとそれぞれの説明。",
           "show_category": "以下は`{category}`の命令リストとそれぞれの説明：\n{commandLists}"
         },
         "result": "**種類：** `{category}`\n**使い方：** `{name}`\n{usage}{aliases}"
