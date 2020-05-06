@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Remoting;
 using System.Threading.Tasks;
 using TaigaBotCS.Interfaces;
 using TaigaBotCS.Utility;
@@ -145,10 +144,7 @@ namespace TaigaBotCS.Commands
                     (_category, _names) => new
                     {
                         Category = (helpInfos[_category] as List<object>).Cast<string>().ElementAt(1),
-                        Commands = string.Join(' ', _names.Select(name =>
-                        {
-                            return '`' + name + '`';
-                        })),
+                        Commands = string.Join(' ', _names.Select(name => '`' + name + '`')),
                         Icon = (helpInfos[_category] as List<object>).Cast<string>().ElementAt(0)
                     });
 
@@ -162,10 +158,7 @@ namespace TaigaBotCS.Commands
                         Value = allCommands.ElementAt(i).Commands
                     });
 
-                    if (i != 0 && i % 3 == 0)
-                        inline = false;
-                    else
-                        inline = true;
+                    inline = !(i != 0 && i % 3 == 0);
                 }
 
                 return embed.Build();

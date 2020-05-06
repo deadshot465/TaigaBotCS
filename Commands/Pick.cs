@@ -35,7 +35,17 @@ namespace TaigaBotCS.Commands
         {
             SetMemberConfig(Context.User.Id);
 
-            var optionList = options.Split('|').Select(str => str.Trim()).ToList();
+            var optionList = options.Split('|')
+                .Select(str => str.Trim())
+                .Where(str => !string.IsNullOrEmpty(str) && !string.IsNullOrWhiteSpace(str))
+                .ToList();
+            
+            if (optionList.Count <= 0)
+            {
+                await HandleErrorAsync(PickError.LengthTooShort);
+                return;
+            }
+
             var msg = _pickCommandTexts[Context.User.Id]["result"].ToString()
                 .Replace("{option}", optionList[_rng.Next(0, optionList.Count)]);
 
