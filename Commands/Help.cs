@@ -140,13 +140,20 @@ namespace TaigaBotCS.Commands
                         var attr = t.GetCustomAttribute<Attributes.CommandAttribute>();
                         return (attr.Category, attr.Name);
                     })
+                    .OrderBy(element => element.Name)
                     .GroupBy(element => element.Category, element => element.Name,
-                    (_category, _names) => new
+                    (_category, _names) =>
                     {
-                        Category = (helpInfos[_category] as List<object>).Cast<string>().ElementAt(1),
-                        Commands = string.Join(' ', _names.Select(name => '`' + name + '`')),
-                        Icon = (helpInfos[_category] as List<object>).Cast<string>().ElementAt(0)
-                    });
+                        var _categories = helpInfos[_category] as Dictionary<string, object>;
+
+                        return new
+                        {
+                            Category = _categories["type"].ToString(),
+                            Commands = string.Join(' ', _names.Select(name => '`' + name + '`')),
+                            Icon = _categories["icon"].ToString()
+                        };
+                    })
+                    .OrderBy(element => element.Category);
 
                 var inline = true;
                 for (var i = 0; i < allCommands.Count(); i++)
