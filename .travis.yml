@@ -1,5 +1,5 @@
 language: csharp
-solution: Owoify.Net.sln
+solution: TaigaBotCS.sln
 mono: none
 dotnet: 3.1.200
 script:
