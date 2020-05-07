@@ -41,17 +41,40 @@ However, as the developers of Yuuto started seeking more robust languages than J
 
 This repo doesn't include compiled files, which usually are stored under the `bin` folder of the root directory. Therefore, whether you are interested in hosting Taiga bot on your own or are just interested in the code, there are some required steps before you can compile the code.
 
-1. [Install .NET Core](https://dotnet.microsoft.com/download) with methods that apply to your operating system. If you're on Windows or macOS, using [Microsoft Visual Studio](https://visualstudio.microsoft.com/en/downloads/) or [Microsoft Visual Studio Code](https://visualstudio.microsoft.com/en/downloads/) is strongly recommended, as Taiga is developed with these IDEs.
+1. [Install .NET Core](https://dotnet.microsoft.com/download) with methods that apply to your operating system. If you're on Windows or macOS, using [Microsoft Visual Studio](https://visualstudio.microsoft.com/en/downloads/) or [Microsoft Visual Studio Code](https://visualstudio.microsoft.com/en/downloads/) is strongly recommended, as Taiga is developed with these IDEs. However, if you prefer installing .NET Core via command line, assuming you're using Ubuntu, you can use the following commands to install .NET Core SDK:
 
-3. Clone this repository with:
+   ```bash
+   sudo add-apt-repository universe
+   sudo apt-get update
+   sudo apt-get install apt-transport-https
+   sudo apt-get update
+   sudo apt-get install dotnet-sdk-3.1
+   ```
+
+2. Clone this repository with:
 
    ```bash
    git clone https://github.com/deadshot465/TaigaBotCS.git
    ```
 
-4. Assuming you're using Visual Studio, open up `TaigaBotCS.sln`, the IDE should take care and download required NuGet packages for you.
+3. Assuming you're using Visual Studio, open up `TaigaBotCS.sln`, the IDE should take care and download required NuGet packages for you. Alternatively, use the following commands to either restore NuGet packages, build the project, or run the project via command line. **Please be advised that the project will not run when the `.env` file is not present.**
 
-6. Provided that you have created your own application on Discord, you can manually create a file named `.env` in the same location as the compiled executable named `TaigaBotCS.exe` (Windows) or the respective files on other platforms, as the program will read required tokens and environment variables from this file. An unmodified version of Taiga bot expects the following variables/tokens from `.env`:
+   ```bash
+   cd <path-to-the-root-directory-of-the-repo>
+   
+   # This will only restore NuGet packages
+   # Usually you don't need to run it manually
+   dotnet restore
+   
+   # This will only build the project but not run it
+   # Omitting -c Release will result in building with Debug configuration
+   dotnet build -c Release -r linux-x64
+   
+   # This will build and run immediately
+   dotnet run -c Release -r linux-x64
+   ```
+
+4. Provided that you have created your own application on Discord, you can manually create a file named `.env` in the same location as the compiled executable named `TaigaBotCS.exe` (Windows) or the respective files on other platforms, as the program will read required tokens and environment variables from this file. An unmodified version of Taiga bot expects the following variables/tokens from `.env`:
 
    ```
    TOKEN = <Your Discord application token here>
@@ -71,10 +94,10 @@ This repo doesn't include compiled files, which usually are stored under the `bi
    RDM_REPLY_CHANCE = <The probability of Taiga replying to messages related to certain characters>
    SPECIALIZED_CHANCE = <The probability of Taiga replying to messages related to certain characters using specialized messages>
    ```
-   
+
    **All placeholder texts should be replaced with your own content, without quotation marks (`"` and `'`) and greater than/less than (`<` and `>`) symbols.**
-   
-7. Once you set up, compile the program to run the bot.
+
+5. Once you set up, compile the program to run the bot.
 
 
 ## Differences between Taiga Bot and Yuuto Bot
