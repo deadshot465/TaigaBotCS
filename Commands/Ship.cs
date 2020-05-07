@@ -227,7 +227,8 @@ namespace TaigaBotCS.Commands
                 }
             };
 
-            await Context.Channel.SendFileAsync(response, "love.png", embed: embed.Build());
+            await Context.Channel.SendMessageAsync(embed: embed.Build());
+            await Context.Channel.SendFileAsync(response, "love.png");
         }
     }
 }
