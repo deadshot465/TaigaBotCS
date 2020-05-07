@@ -224,11 +224,10 @@ namespace TaigaBotCS.Commands
                             .Replace("{name2}", second)
                         }
                     }
-                },
+                }
             };
 
-            await Context.Channel.SendMessageAsync(embed: embed.Build());
-            await Context.Channel.SendFileAsync(response, "love.png");
+            await Context.Channel.SendFileAsync(response, "love.png", embed: embed.Build());
         }
     }
 }
