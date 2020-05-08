@@ -55,13 +55,13 @@ namespace TaigaBotCS.Commands
 
         public Dialog() : base()
         {
+            _backgroundString = string.Join(", ", _backgrounds);
+            _characterString = string.Join(", ", _characters);
+
             var dialogText = Helper.GetLocalization("en").texts.dialog;
             var usage = dialogText["usage"].ToString()
                 .Replace("{backgrounds}", string.Join(", ", _backgroundString));
             usage = usage.Replace("{characters}", string.Join(", ", _characterString));
-
-            _backgroundString = string.Join(", ", _backgrounds);
-            _characterString = string.Join(", ", _characters);
 
             TypeDescriptor.AddAttributes(typeof(Dialog),
                 new Attributes.CommandAttribute("dialog", "fun", usage, null));
