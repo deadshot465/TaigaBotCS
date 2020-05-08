@@ -21,15 +21,18 @@ namespace TaigaBotCS.Commands
         
         private readonly string[] _backgrounds = new[]
         {
-            "bath", "beach", "cabin", "camp",
-            "cave", "forest", "messhall"
+            "alley", "bath", "beach", "beachstone", "brokencabin", "cabin", "camp",
+            "campfire", "cave", "caveday", "cavenight", "festival", "forest",
+            "hirobath", "hiroroom", "hunterdorm", "keitaroroom", "kitchen", "messhall",
+            "obstacle", "office", "pier", "tent", "waterfall", "waterfalltop"
         };
 
         private readonly string[] _characters = new[]
         {
             "aiden", "avan", "chiaki", "connor", "eduard", "felix", "goro", "hiro",
             "hunter", "jirou", "keitaro", "kieran", "knox", "lee", "naoto", "natsumi",
-            "seto", "taiga", "yoichi", "yoshi", "yuri", "yuuto"
+            "seto", "taiga", "yoichi", "yoshi", "yuri", "yuuto", "keitarohiro",
+            "keitarohunter", "keitaronatsumi", "keitarotaiga", "keitaroyoichi"
         };
 
         private readonly string _backgroundString;

@@ -26,7 +26,7 @@ namespace TaigaBotCS.Services
 
             var request = new HttpRequestMessage
             {
-                RequestUri = new Uri("https://yuuto.dunctebot.com/dialog"),
+                RequestUri = new Uri("https://tetsukizone.com/api/dialog"),
                 Method = HttpMethod.Post,
                 Headers =
                 {

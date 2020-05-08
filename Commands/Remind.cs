@@ -111,6 +111,7 @@ namespace TaigaBotCS.Commands
             if (result != null)
             {
                 var msg = _remindCommandTexts["result"].ToString()
+                    .Replace("{time}", DateTime.Now.ToString())
                     .Replace("{dueTime}", result.ToString());
                 await Context.Channel.SendMessageAsync(msg);
             }
