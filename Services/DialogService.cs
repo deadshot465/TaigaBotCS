@@ -15,9 +15,16 @@ namespace TaigaBotCS.Services
     public class DialogService
     {
         private readonly HttpClient _http;
+        private readonly HttpClientHandler _handler;
 
         public DialogService(HttpClient http)
-            => _http = http;
+        {
+            _handler = new HttpClientHandler();
+            _handler.ServerCertificateCustomValidationCallback
+                = (sender, cert, chain, sslPolicyErrors) => true;
+
+            _http = new HttpClient(_handler);
+        }
 
         public async Task<Stream> GetDialogAsync(ICommandContext context,
             DialogObject obj, string cooldownMessage)
