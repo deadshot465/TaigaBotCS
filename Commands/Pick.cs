@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using TaigaBotCS.Interfaces;
 using TaigaBotCS.Utility;
@@ -71,15 +72,41 @@ namespace TaigaBotCS.Commands
 
             if (isMultiple)
             {
-                var dict = new Dictionary<string, int>();
+                var dict = new Dictionary<string, uint>();
                 foreach (var option in optionList)
                 {
                     dict.Add(option, 0);
                 }
 
-                for (uint i = 0; i < pickTimes; i++)
+                if (pickTimes > 10000000)
                 {
-                    dict[optionList[_rng.Next(0, optionList.Count)]]++;
+                    Thread[] workerThreads = new Thread[5];
+                    var startIndex = 0u;
+                    var endIndex = (uint)pickTimes / (uint)workerThreads.Length;
+                    var range = endIndex - startIndex;
+                    for (var i = 0; i < workerThreads.Length; i++)
+                    {
+                        workerThreads[i] = new Thread(_ => HandlePick(optionList, dict, startIndex, endIndex));
+                        startIndex = endIndex + 1u;
+                        endIndex = (endIndex + range > (uint)pickTimes) ? (uint)pickTimes : (endIndex + range);
+                    }
+
+                    foreach (var worker in workerThreads)
+                    {
+                        worker.Start();
+                    }
+
+                    foreach (var worker in workerThreads)
+                    {
+                        worker.Join();
+                    }
+                }
+                else
+                {
+                    for (uint i = 0; i < pickTimes; i++)
+                    {
+                        dict[optionList[_rng.Next(0, optionList.Count)]]++;
+                    }
                 }
 
                 var orderedDict = dict.OrderByDescending(pair => pair.Value);
@@ -128,6 +155,18 @@ namespace TaigaBotCS.Commands
 
             if (!string.IsNullOrEmpty(msg))
                 await Context.Channel.SendMessageAsync(msg);
+        }
+
+        private static async Task HandlePick(List<string> optionList, Dictionary<string, uint> dict, uint startIndex, uint endIndex)
+        {
+            var rng = new Random();
+
+            for (uint i = startIndex; i < endIndex; i++)
+            {
+                dict[optionList[rng.Next(0, optionList.Count)]]++;
+            }
+
+            await Task.CompletedTask;
         }
     }
 }
