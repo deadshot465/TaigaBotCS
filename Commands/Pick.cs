@@ -21,7 +21,7 @@ namespace TaigaBotCS.Commands
 
         private enum PickError
         {
-            LengthTooShort
+            LengthTooShort, TimesTooBig
         }
 
 #pragma warning disable CS1998
@@ -42,13 +42,19 @@ namespace TaigaBotCS.Commands
                 .ToList();
 
             var isMultiple = false;
-            var pickTimes = 0;
+            var pickTimes = 0ul;
             if (times.EndsWith("times"))
             {
                 var index = times.LastIndexOf('t');
                 times = times.Substring(0, index);
+                var result = ulong.TryParse(times, out pickTimes);
                 isMultiple = true;
-                pickTimes = int.Parse(times);
+                
+                if (!result || pickTimes > uint.MaxValue)
+                {
+                    await HandleErrorAsync(PickError.TimesTooBig);
+                    return;
+                }
             }
             else
             {
@@ -71,7 +77,7 @@ namespace TaigaBotCS.Commands
                     dict.Add(option, 0);
                 }
 
-                for (int i = 0; i < pickTimes; i++)
+                for (uint i = 0; i < pickTimes; i++)
                 {
                     dict[optionList[_rng.Next(0, optionList.Count)]]++;
                 }
@@ -116,6 +122,7 @@ namespace TaigaBotCS.Commands
             var msg = error switch
             {
                 PickError.LengthTooShort => pickErrors["length_too_short"].ToString(),
+                PickError.TimesTooBig => pickErrors["times_too_big"].ToString(),
                 _ => string.Empty
             };
 
