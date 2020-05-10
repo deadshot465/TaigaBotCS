@@ -86,7 +86,7 @@ namespace TaigaBotCS.Commands
                     var range = endIndex - startIndex;
                     for (var i = 0; i < workerThreads.Length; i++)
                     {
-                        workerThreads[i] = new Thread(_ => HandlePick(optionList, dict, startIndex, endIndex));
+                        workerThreads[i] = new Thread(_ => HandlePick(optionList, ref dict, startIndex, endIndex));
                         startIndex = endIndex + 1u;
                         endIndex = (endIndex + range > (uint)pickTimes) ? (uint)pickTimes : (endIndex + range);
                     }
@@ -157,7 +157,7 @@ namespace TaigaBotCS.Commands
                 await Context.Channel.SendMessageAsync(msg);
         }
 
-        private static async Task HandlePick(List<string> optionList, Dictionary<string, uint> dict, uint startIndex, uint endIndex)
+        private static void HandlePick(List<string> optionList, ref Dictionary<string, uint> dict, uint startIndex, uint endIndex)
         {
             var rng = new Random();
 
@@ -165,8 +165,6 @@ namespace TaigaBotCS.Commands
             {
                 dict[optionList[rng.Next(0, optionList.Count)]]++;
             }
-
-            await Task.CompletedTask;
         }
     }
 }
