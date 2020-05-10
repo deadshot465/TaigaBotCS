@@ -5,6 +5,7 @@ using Discord.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using TaigaBotCS.Interfaces;
 using TaigaBotCS.Utility;
@@ -31,7 +32,7 @@ namespace TaigaBotCS.Commands
 
         [Command("pick")]
         [Alias("choose")]
-        public async Task PickAsync([Remainder] string options)
+        public async Task PickAsync(string times, [Remainder] string options)
         {
             SetMemberConfig(Context.User.Id);
 
@@ -39,6 +40,20 @@ namespace TaigaBotCS.Commands
                 .Select(str => str.Trim())
                 .Where(str => !string.IsNullOrEmpty(str) && !string.IsNullOrWhiteSpace(str))
                 .ToList();
+
+            var isMultiple = false;
+            var pickTimes = 0;
+            if (times.EndsWith("times"))
+            {
+                var index = times.LastIndexOf('t');
+                times = times.Substring(0, index);
+                isMultiple = true;
+                pickTimes = int.Parse(times);
+            }
+            else
+            {
+                optionList.Insert(0, times);
+            }
             
             if (optionList.Count <= 0)
             {
@@ -46,9 +61,41 @@ namespace TaigaBotCS.Commands
                 return;
             }
 
-            var msg = _pickCommandTexts[Context.User.Id]["result"].ToString()
-                .Replace("{option}", optionList[_rng.Next(0, optionList.Count)]);
+            var msg = string.Empty;
 
+            if (isMultiple)
+            {
+                var dict = new Dictionary<string, int>();
+                foreach (var option in optionList)
+                {
+                    dict.Add(option, 0);
+                }
+
+                for (int i = 0; i < pickTimes; i++)
+                {
+                    dict[optionList[_rng.Next(0, optionList.Count)]]++;
+                }
+
+                var orderedDict = dict.OrderByDescending(pair => pair.Value);
+
+                var builder = new StringBuilder();
+                builder.Append(_pickCommandTexts[Context.User.Id]["result"].ToString()
+                    .Replace("{option}", orderedDict.First().Key));
+                builder.Append("\nTotal times:\n");
+
+                foreach (var option in orderedDict)
+                {
+                    builder.Append($"{option.Key} - {option.Value} times\n");
+                }
+
+                msg = builder.ToString();
+            }
+            else
+            {
+                msg = _pickCommandTexts[Context.User.Id]["result"].ToString()
+                    .Replace("{option}", optionList[_rng.Next(0, optionList.Count)]);
+            }
+            
             await ReplyAsync(msg);
         }
 

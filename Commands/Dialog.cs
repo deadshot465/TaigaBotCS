@@ -43,6 +43,8 @@ namespace TaigaBotCS.Commands
             = new Regex(@"<(?:[^\d>]+|:[A-Za-z0-9]+:)\w+>");
         private readonly Regex _nonAsciiRegex
             = new Regex(@"[^\x00-\x7F]");
+        private readonly Regex _nonJapaneseRegex
+            = new Regex(@"[^\u4e00-\u9fbf\u3040-\u309f\u30a0-\u30ff\uff00-\uff9f\u3000-\u303f]");
 
         private Dictionary<ulong, Dictionary<string, object>> _dialogCommandTexts
             = new Dictionary<ulong, Dictionary<string, object>>();
@@ -114,7 +116,8 @@ namespace TaigaBotCS.Commands
             }
             if (_emojiRegex.IsMatch(content) ||
                 _emoteMentionsRegex.IsMatch(content) ||
-                _nonAsciiRegex.IsMatch(content))
+                (_nonAsciiRegex.IsMatch(content) &&
+                _nonJapaneseRegex.IsMatch(content)))
             {
                 _ = HandleErrorAsync(DialogError.WrongCharacterSet, null);
                 return;
@@ -125,6 +128,21 @@ namespace TaigaBotCS.Commands
 
             try
             {
+                var spaceRegex = new Regex(@"\s|\uff00");
+                var asciiRegex = new Regex(@"[\x00-\x7F]");
+                var japaneseRegex = new Regex(@"[\u4e00-\u9fbf\u3040-\u309f\u30a0-\u30ff\uff00-\uff9f\u3000-\u303f]");
+                if (!spaceRegex.IsMatch(content))
+                {
+                    var interleaveIndex = 0;
+                    if (asciiRegex.IsMatch(content)) interleaveIndex = 29;
+                    else if (japaneseRegex.IsMatch(content)) interleaveIndex = 13;
+
+                    for (var i = interleaveIndex; i < content.Length; i += interleaveIndex + 1)
+                    {
+                        content = content.Insert(i, "\n");
+                    }
+                }
+
                 var stream = await DialogService.GetDialogAsync(Context, new DialogObject
                 {
                     background = background,

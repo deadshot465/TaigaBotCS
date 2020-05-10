@@ -206,7 +206,7 @@
       },
       "pick": {
         "description": "Pick from several options",
-        "usage": "Run `pick <option1> | <option2> | <option3>...` to make Taiga pick one option for you.",
+        "usage": "Run `pick <option1> | <option2> | <option3>...` to make Taiga pick one option for you. Run `pick <number>times <option1> | <option2> | <option3>...` to make Taiga pick more than once and determine the option that is picked up most times for you.",
         "errors": {
           "length_too_short": "This command requires at least two options: `pick <option1> | <option2>...`"
         },
@@ -456,9 +456,9 @@
       },
       "pick": {
         "description": "複数の選択肢から一つだけを選ぶ",
-        "usage": "`pick <option1> | <option2> | <option3>...`を実行し、難しい選択をたいがに任せる。",
+        "usage": "`pick <選択肢１> | <選択肢２> | <選択肢３>...`を実行し、難しい選択をたいがに任せる。`pick <回数>times <選択肢１> | <選択肢２> | <選択肢３>...`を実行したら、一回以上選べます。",
         "errors": {
-          "length_too_short": "この命令は二つの引数は必要だ：`pick <option1> | <option2>...`"
+          "length_too_short": "この命令は少なくとも二つの引数は必要だ：`pick <option1> | <option2>...`"
         },
         "result": "<:TaigaSmug:702210822310723614> 俺が選んだのは**{option}**だ！"
       },
