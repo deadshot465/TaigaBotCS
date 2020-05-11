@@ -128,21 +128,6 @@ namespace TaigaBotCS.Commands
 
             try
             {
-                var spaceRegex = new Regex(@"\s|\uff00");
-                var asciiRegex = new Regex(@"[\x00-\x7F]");
-                var japaneseRegex = new Regex(@"[\u4e00-\u9fbf\u3040-\u309f\u30a0-\u30ff\uff00-\uff9f\u3000-\u303f]");
-                if (!spaceRegex.IsMatch(content))
-                {
-                    var interleaveIndex = 0;
-                    if (asciiRegex.IsMatch(content)) interleaveIndex = 29;
-                    else if (japaneseRegex.IsMatch(content)) interleaveIndex = 13;
-
-                    for (var i = interleaveIndex; i < content.Length; i += interleaveIndex + 1)
-                    {
-                        content = content.Insert(i, "\n");
-                    }
-                }
-
                 var stream = await DialogService.GetDialogAsync(Context, new DialogObject
                 {
                     background = background,
