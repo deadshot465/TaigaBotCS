@@ -41,7 +41,7 @@ namespace TaigaBotCS.Commands
                     mealData["strInstructions"].ToString(),
                     Title = mealData["strMeal"].ToString(),
                     ImageUrl = mealData["strMealThumb"].ToString(),
-                    Url = mealData["strYoutube"].ToString(),
+                    Url = mealData["strSource"].ToString(),
                     Fields = new List<EmbedFieldBuilder>
                     {
                         {
@@ -58,6 +58,14 @@ namespace TaigaBotCS.Commands
                                 IsInline = true,
                                 Name = mealUis["area"].ToString(),
                                 Value = mealData["strArea"].ToString()
+                            }
+                        },
+                        {
+                            new EmbedFieldBuilder
+                            {
+                                IsInline = true,
+                                Name = mealUis["video_link"].ToString(),
+                                Value = mealData["strYoutube"].ToString()
                             }
                         }
                     },

@@ -25,6 +25,7 @@ namespace TaigaBotCS.Services
         private readonly AdminService _adminService;
         private readonly ReminderService _reminderService;
         private readonly IServiceProvider _services;
+
         private Dictionary<string, Dictionary<ulong, DateTime>> _cooldowns =
             new Dictionary<string, Dictionary<ulong, DateTime>>();
         private Random _rng = new Random();
@@ -55,6 +56,7 @@ namespace TaigaBotCS.Services
 
         public async Task InitializeAsync()
         {
+            await PersistenceService.LoadDialogData();
             await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
         }
 
@@ -98,9 +100,6 @@ namespace TaigaBotCS.Services
             var responseText = Helper.GetLocalization(memberConfig?.Language);
 
             // Check if the user is on cooldown
-            var now = DateTime.Now;
-            var res = _cooldowns.TryGetValue(command, out var timestamps);
-            var modules = _commands.Modules;
             var allCommands = typeof(CommandHandlingService).Assembly
                 .GetTypes()
                 .Where(t => t.GetCustomAttributes(typeof(Commands.Attributes.CommandAttribute), true).Length > 0);
@@ -113,6 +112,12 @@ namespace TaigaBotCS.Services
                 })
                 .First().GetCustomAttribute<Commands.Attributes.CommandAttribute>();
             var cooldownAmount = attribute.Cooldown * 1000.0;
+            var now = DateTime.Now;
+            var res = _cooldowns.TryGetValue(command, out var timestamps);
+            if (!res && attribute.Aliases != null && attribute.Aliases.Length > 0)
+            {
+                res = _cooldowns.TryGetValue(attribute.Name, out timestamps);
+            }
 
             if (timestamps != null && timestamps.TryGetValue(message.Author.Id, out var startTime))
             {

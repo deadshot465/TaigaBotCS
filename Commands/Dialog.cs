@@ -19,21 +19,21 @@ namespace TaigaBotCS.Commands
     {
         public DialogService DialogService { get; set; }
         
-        private readonly string[] _backgrounds = new[]
-        {
-            "alley", "bath", "beach", "beachstone", "brokencabin", "cabin", "camp",
-            "campfire", "cave", "caveday", "cavenight", "festival", "forest",
-            "hirobath", "hiroroom", "hunterdorm", "keitaroroom", "kitchen", "messhall",
-            "obstacle", "office", "pier", "tent", "waterfall", "waterfalltop"
-        };
+        //private readonly string[] _backgrounds = new[]
+        //{
+        //    "alley", "bath", "beach", "beachstone", "brokencabin", "cabin", "camp",
+        //    "campfire", "cave", "caveday", "cavenight", "festival", "forest",
+        //    "hirobath", "hiroroom", "hunterdorm", "keitaroroom", "kitchen", "messhall",
+        //    "obstacle", "office", "pier", "tent", "waterfall", "waterfalltop"
+        //};
 
-        private readonly string[] _characters = new[]
-        {
-            "aiden", "avan", "chiaki", "connor", "eduard", "felix", "goro", "hiro",
-            "hunter", "jirou", "keitaro", "kieran", "knox", "lee", "naoto", "natsumi",
-            "seto", "taiga", "yoichi", "yoshi", "yuri", "yuuto", "keitarohiro",
-            "keitarohunter", "keitaronatsumi", "keitarotaiga", "keitaroyoichi"
-        };
+        //private readonly string[] _characters = new[]
+        //{
+        //    "aiden", "avan", "chiaki", "connor", "eduard", "felix", "goro", "hiro",
+        //    "hunter", "jirou", "keitaro", "kieran", "knox", "lee", "naoto", "natsumi",
+        //    "seto", "taiga", "yoichi", "yoshi", "yuri", "yuuto", "keitarohiro",
+        //    "keitarohunter", "keitaronatsumi", "keitarotaiga", "keitaroyoichi"
+        //};
 
         private readonly string _backgroundString;
         private readonly string _characterString;
@@ -57,8 +57,8 @@ namespace TaigaBotCS.Commands
 
         public Dialog() : base()
         {
-            _backgroundString = string.Join(", ", _backgrounds);
-            _characterString = string.Join(", ", _characters);
+            _backgroundString = string.Join(", ", PersistenceService.DialogBackgrounds);
+            _characterString = string.Join(", ", PersistenceService.DialogCharacters);
 
             var dialogText = Helper.GetLocalization("en").texts.dialog;
             var usage = dialogText["usage"].ToString()
@@ -87,19 +87,19 @@ namespace TaigaBotCS.Commands
         {
             SetMemberConfig(Context.User.Id);
 
-            if (_characters.Contains(background))
+            if (PersistenceService.DialogCharacters.Contains(background))
             {
                 content = $"{character} {content}";
                 character = background;
                 background = "camp";
             }
 
-            if (!_backgrounds.Contains(background))
+            if (!PersistenceService.DialogBackgrounds.Contains(background))
             {
                 _ = HandleErrorAsync(DialogError.BackgroundNotFound, background);
                 return;
             }
-            if (!_characters.Contains(character))
+            if (!PersistenceService.DialogCharacters.Contains(character))
             {
                 _ = HandleErrorAsync(DialogError.CharacterNotFound, character);
                 return;

@@ -22,7 +22,7 @@ namespace TaigaBotCS.Commands
 
         [Command("help")]
         public async Task HelpAsync()
-            => await HelpAsync("help");
+            => await HelpAsync("list");
 
         [Command("help")]
         public async Task HelpAsync(string commandName)

@@ -219,6 +219,7 @@
         "errors": {
         },
         "uis": {
+          "video_link": "YouTube Video",
           "category": "Category",
           "area": "Area",
           "footer": "Bon Appétit! Powered by TheMealDB.com."
@@ -470,6 +471,7 @@
         "errors": {
         },
         "uis": {
+          "video_link": "YouTubeビデオ",
           "category": "種類",
           "area": "エリア",
           "footer": "どうぞお召し上がりくださいませ！"

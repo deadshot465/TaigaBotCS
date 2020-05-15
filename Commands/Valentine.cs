@@ -14,7 +14,7 @@ using Utf8Json;
 
 namespace TaigaBotCS.Commands
 {
-    [Attributes.Command("valentine", "info", null, new string[] { "lover" }, 5.0f)]
+    [Attributes.Command("valentine", "info", null, new string[] { "lover", "v" }, 5.0f)]
     public class Valentine : ModuleBase<SocketCommandContext>, ICharacterRoutable, IMemberConfigurable
     {
         private const string _valentinePath = "./storage/valentines.json";
@@ -31,7 +31,7 @@ namespace TaigaBotCS.Commands
         }
 
         [Command("valentine")]
-        [Alias("lover")]
+        [Alias("lover", "v")]
         public async Task ValentineAsync(params string[] discard)
         {
             SetMemberConfig(Context.User.Id);
