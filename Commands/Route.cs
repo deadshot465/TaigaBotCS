@@ -4,9 +4,11 @@
 using Discord;
 using Discord.Commands;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using TaigaBotCS.Interfaces;
 using TaigaBotCS.Utility;
@@ -18,6 +20,13 @@ namespace TaigaBotCS.Commands
     {
         private const string _routePath = "./storage/routes.json";
         private readonly List<CharacterObject> _routes;
+        private readonly string[] _secretRouteEmoteIds = new[]
+        {
+            "703591584305774662",
+            "710951618576908289",
+            "710964585691086869",
+            "710957588237385789"
+        };
 
         private Dictionary<ulong, Dictionary<string, object>> _routeCommandTexts
             = new Dictionary<ulong, Dictionary<string, object>>();
@@ -95,7 +104,9 @@ namespace TaigaBotCS.Commands
                 {
                     Text = footer
                 },
-                ThumbnailUrl = GetEmoteUrl(route.emoteId),
+                ThumbnailUrl = (route.name == "Hiro Akiba (Mature)") ?
+                GetEmoteUrl(_secretRouteEmoteIds[_rng.Next(_secretRouteEmoteIds.Length)]) :
+                GetEmoteUrl(route.emoteId),
                 Title = title
             };
 
