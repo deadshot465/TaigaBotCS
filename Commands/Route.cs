@@ -4,11 +4,9 @@
 using Discord;
 using Discord.Commands;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using TaigaBotCS.Interfaces;
 using TaigaBotCS.Utility;
@@ -24,8 +22,9 @@ namespace TaigaBotCS.Commands
         {
             "703591584305774662",
             "710951618576908289",
-            "710964585691086869",
-            "710957588237385789"
+            "711192310767157248",
+            "710957588237385789",
+            "711227408933453844"
         };
 
         private Dictionary<ulong, Dictionary<string, object>> _routeCommandTexts
@@ -136,6 +135,20 @@ namespace TaigaBotCS.Commands
         }
 
         private CharacterObject GetRoute()
-            => _routes[_rng.Next(0, _routes.Count)];
+        {
+            var res = _rng.Next(0, 100);
+
+#pragma warning disable CS8509
+            return res switch
+            {
+                var x when x >= 0 && x <= 14 => _routes[0],
+                var x when x >= 15 && x <= 19 => _routes[1],
+                var x when x >= 20 && x <= 35 => _routes[2],
+                var x when x >= 36 && x <= 51 => _routes[3],
+                var x when x >= 52 && x <= 67 => _routes[4],
+                var x when x >= 68 && x <= 83 => _routes[5],
+                var x when x >= 84 && x <= 99 => _routes[6]
+            };
+        }
     }
 }
