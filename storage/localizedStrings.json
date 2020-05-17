@@ -245,6 +245,15 @@
           "no_message": "<:TaigaAngry:699705315519889479> There's no message at all. What the actual fuck?"
         },
         "result": "It's {time} in my place, so I will remind you on {dueTime}."
+      },
+      "stats": {
+        "description": "This command will show your records with several commands.",
+        "usage": "Run `stats <command>` to show your records with several commands. Available commands are: `route, valentine`.",
+        "errors": {
+          "length_too_short": "<:TaigaAnnoyed2:704143497921429555> At least give me a command's name.",
+          "no_such_command": "<:TaigaUneasy2:700006812673638500> There's no such command in my record books."
+        },
+        "result": "Here's {user}'s records with `{command}`:\n"
       }
     }
   },
@@ -497,6 +506,15 @@
           "no_message": "<:TaigaAngry:699705315519889479> メッセージがないだろう！"
         },
         "result": "俺のところ現在は{time}だから、{dueTime}にお前を通知するんだ。"
+      },
+      "stats": {
+        "description": "この命令は一部の命令の使用記録を表します。",
+        "usage": "`stats <command>`を実行し、一部の命令の記録を表示する。可能の命令は：`route、valentine`。",
+        "errors": {
+          "length_too_short": "<:TaigaAnnoyed2:704143497921429555> 命令がないならいくら有能でも何もできねんだよ。",
+          "no_such_command": "<:TaigaUneasy2:700006812673638500> 俺の記録の中にこの命令がない。"
+        },
+        "result": "{user}の`{command}`使用記録は：\n"
       }
     }
   }

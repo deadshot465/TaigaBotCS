@@ -9,6 +9,7 @@ using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
 using TaigaBotCS.Interfaces;
+using TaigaBotCS.Services;
 using TaigaBotCS.Utility;
 
 namespace TaigaBotCS.Commands
@@ -38,7 +39,7 @@ namespace TaigaBotCS.Commands
         }
 
         [Command("route")]
-        public async Task RouteAsync(params string[] discard)
+        public async Task RouteAsync(params string[] _)
         {
             SetMemberConfig(Context.User.Id);
 
@@ -108,6 +109,8 @@ namespace TaigaBotCS.Commands
                 GetEmoteUrl(route.emoteId),
                 Title = title
             };
+
+            PersistenceService.AddUserRecord(GetType().Name.ToLower(), route.name, Context.User.Id, $"{ending} Ending");
 
             return new Tuple<Embed, string>(embed.Build(), string.Empty);
         }

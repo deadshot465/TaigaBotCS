@@ -63,6 +63,7 @@ namespace TaigaBotCS.Utility
         public Dictionary<string, object> meal;
         public Dictionary<string, object> owoify;
         public Dictionary<string, object> remind;
+        public Dictionary<string, object> stats;
     }
 
     public struct LocalizationObject

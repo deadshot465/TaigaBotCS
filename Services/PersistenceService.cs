@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -11,6 +12,11 @@ namespace TaigaBotCS.Services
     {
         public static List<string> DialogBackgrounds { get; private set; }
         public static List<string> DialogCharacters { get; private set; }
+
+        private const string _userRecordPath = "./storage/userRecords.json";
+
+        private static Dictionary<ulong, Dictionary<string, Dictionary<string, dynamic>>> _userStates
+            = new Dictionary<ulong, Dictionary<string, Dictionary<string, dynamic>>>();
 
         private static Dictionary<string, object> _savedData
             = new Dictionary<string, object>();
@@ -37,6 +43,63 @@ namespace TaigaBotCS.Services
             DialogCharacters = new List<string>(characters);
             DialogBackgrounds = new List<string>(backgrounds);
         }
+
+        public static void AddUserRecord(string commandName, string target, ulong userId, params string[] extraInfo)
+        {
+            if (!_userStates.ContainsKey(userId))
+                _userStates.Add(userId, new Dictionary<string, Dictionary<string, dynamic>>());
+
+            if (!_userStates[userId].ContainsKey(commandName))
+                _userStates[userId].Add(commandName, new Dictionary<string, dynamic>());
+
+            if (extraInfo.Length > 0)
+            {
+                if (!_userStates[userId][commandName].ContainsKey(target))
+                {
+                    _userStates[userId][commandName].Add(target, new Dictionary<string, uint>());
+                }
+
+                if (!_userStates[userId][commandName][target].ContainsKey(extraInfo[0]))
+                {
+                    _userStates[userId][commandName][target].Add(extraInfo[0], 1);
+                    return;
+                }
+
+                _userStates[userId][commandName][target][extraInfo[0]]++;
+            }
+            else
+            {
+                if (!_userStates[userId][commandName].ContainsKey(target))
+                {
+                    _userStates[userId][commandName].Add(target, 1);
+                    return;
+                }
+
+                _userStates[userId][commandName][target]++;
+            }
+        }
+
+        public static Dictionary<string, dynamic> GetUserRecord(string commandName, ulong userId)
+        {
+            if (!_userStates.ContainsKey(userId))
+                _userStates.Add(userId, new Dictionary<string, Dictionary<string, dynamic>>());
+
+            if (!_userStates[userId].ContainsKey(commandName))
+                _userStates[userId].Add(commandName, new Dictionary<string, dynamic>());
+
+            return _userStates[userId][commandName];
+        }
+
+        public static Dictionary<string, Dictionary<string, dynamic>> GetUserRecord(ulong userId)
+        {
+            if (!_userStates.ContainsKey(userId))
+                _userStates.Add(userId, new Dictionary<string, Dictionary<string, dynamic>>());
+
+            return _userStates[userId];
+        }
+
+        public static async Task WriteUserRecord()
+            => await File.WriteAllBytesAsync(_userRecordPath, JsonSerializer.Serialize(_userStates));
 
         public static bool SaveData<T>(string key, T value)
         {

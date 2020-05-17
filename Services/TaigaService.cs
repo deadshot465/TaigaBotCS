@@ -37,11 +37,6 @@ namespace TaigaBotCS.Services
         private readonly double _specializedChance;
         private readonly List<RandomMessageObject> _randomMessages;
         private readonly Regex _reactionRegex = new Regex(@"<:\w+:\d+>");
-        private readonly string[] _backgrounds = new[]
-        {
-            "bath", "beach", "cabin", "camp",
-            "cave", "forest", "messhall"
-        };
 
         private Random _rng = new Random();
         private Dictionary<ulong, MemberConfig> _randomMessageMemberConfig
@@ -147,7 +142,8 @@ namespace TaigaBotCS.Services
                     {
                         var stream = await _dialogService.GetDialogAsync(null, new DialogObject
                         {
-                            background = _backgrounds[_rng.Next(0, _backgrounds.Length)],
+                            background = PersistenceService
+                            .DialogBackgrounds[_rng.Next(0, PersistenceService.DialogBackgrounds.Count)],
                             character = "taiga",
                             text = "Hiro will be terribly wrong if he thinks he can steal Keitaro from me!"
                         }, string.Empty);

@@ -9,6 +9,7 @@ using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
 using TaigaBotCS.Interfaces;
+using TaigaBotCS.Services;
 using TaigaBotCS.Utility;
 using Utf8Json;
 
@@ -32,7 +33,7 @@ namespace TaigaBotCS.Commands
 
         [Command("valentine")]
         [Alias("lover", "v")]
-        public async Task ValentineAsync(params string[] discard)
+        public async Task ValentineAsync(params string[] _)
         {
             SetMemberConfig(Context.User.Id);
             var infos = _valentineCommandTexts[Context.User.Id]["infos"] as Dictionary<string, object>;
@@ -104,6 +105,8 @@ namespace TaigaBotCS.Commands
                 ThumbnailUrl = GetEmoteUrl(valentine.emoteId),
                 Title = valentineName
             };
+
+            PersistenceService.AddUserRecord(GetType().Name.ToLower(), valentine.name, Context.User.Id);
 
             return new Tuple<Embed, string>(embed.Build(), prefixSuffix);
         }

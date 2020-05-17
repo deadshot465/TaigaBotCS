@@ -252,6 +252,8 @@ namespace TaigaBotCS.Services
                     await user.SendMessageAsync(reminder.Item2);
                 }
             }
+
+            await PersistenceService.WriteUserRecord();
         }
     }
 }
