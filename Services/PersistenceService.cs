@@ -33,6 +33,13 @@ namespace TaigaBotCS.Services
 
             var valentineJson = await File.ReadAllBytesAsync(_valentinePath);
             Valentines = JsonSerializer.Deserialize<List<CharacterObject>>(valentineJson);
+
+            if (File.Exists(_userRecordPath))
+            {
+                var userRecordJson = await File.ReadAllBytesAsync(_userRecordPath);
+                _userStates = JsonSerializer
+                    .Deserialize<SortedDictionary<ulong, SortedDictionary<string, SortedDictionary<string, dynamic>>>>(userRecordJson);
+            }
         }
 
         public static async Task LoadDialogData()
