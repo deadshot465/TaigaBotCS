@@ -75,8 +75,8 @@
           "background_not_found": "Sorry, but I couldn't find `{background}` as a location\nAvailable backgrounds are: `{backgrounds}`.",
           "character_not_found": "Sorry, but I don't think that `{character}` is a character in Camp Buddy\nAvailable characters are: `{characters}`.",
           "no_message": "At least give me something to send, you dumbass.",
-          "message_too_long": "Sorry, the message limit is 120 characters <:TaigaAck2:700006264507465778>",
-          "wrong_character_set": "I don't do emotes, mentions, or non-latin characters",
+          "message_too_long": "Sorry, the message limit is 120 characters for latin characters, 78 characters for Japanese <:TaigaAck2:700006264507465778>",
+          "wrong_character_set": "I don't do emotes, mentions, non-latin and non-Japanese characters",
           "cooldown": "I only have two hands, not an octopus. Bother me again later. <:TaigaAngry:699705315519889479>",
           "generic": "An error just happened. I blame Rhakon. <:TaigaLOL:700004692079542333> - {json}"
         },
@@ -327,8 +327,8 @@
           "background_not_found": "ごめん、`{background}`という場所は見つからなかった。\n可能の背景は：`{backgrounds}`。",
           "character_not_found": "ごめん、キャンプバディには`{character}`というキャラクターはいないよ。\n可能のキャラクターは：`{characters}`。",
           "no_message": "せめて何が言いたいのか教えてくれ、馬鹿野郎。",
-          "message_too_long": "わるい、メッセージの制限は120文字数 <:TaigaAck2:700006264507465778>",
-          "wrong_character_set": "絵文字、メンションとラテン文字以外の言語や文字はしねぇよ。",
+          "message_too_long": "わるい、メッセージの制限は英数字120文字数、日本語78文字数だ <:TaigaAck2:700006264507465778>",
+          "wrong_character_set": "絵文字、メンションとラテン・日本語文字以外の言語や文字はしねぇよ。",
           "cooldown": "俺は両手しかないだろう。タコでもないし。少し黙ってくれ <:TaigaAngry:699705315519889479>",
           "generic": "エラーが出てきた。絶対Rhakonのせいだ。 <:TaigaLOL:700004692079542333> - {json}"
         },
