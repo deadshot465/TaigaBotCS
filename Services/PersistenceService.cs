@@ -15,8 +15,8 @@ namespace TaigaBotCS.Services
 
         private const string _userRecordPath = "./storage/userRecords.json";
 
-        private static Dictionary<ulong, Dictionary<string, Dictionary<string, dynamic>>> _userStates
-            = new Dictionary<ulong, Dictionary<string, Dictionary<string, dynamic>>>();
+        private static SortedDictionary<ulong, SortedDictionary<string, SortedDictionary<string, dynamic>>> _userStates
+            = new SortedDictionary<ulong, SortedDictionary<string, SortedDictionary<string, dynamic>>>();
 
         private static Dictionary<string, object> _savedData
             = new Dictionary<string, object>();
@@ -47,10 +47,10 @@ namespace TaigaBotCS.Services
         public static void AddUserRecord(string commandName, string target, ulong userId, params string[] extraInfo)
         {
             if (!_userStates.ContainsKey(userId))
-                _userStates.Add(userId, new Dictionary<string, Dictionary<string, dynamic>>());
+                _userStates.Add(userId, new SortedDictionary<string, SortedDictionary<string, dynamic>>());
 
             if (!_userStates[userId].ContainsKey(commandName))
-                _userStates[userId].Add(commandName, new Dictionary<string, dynamic>());
+                _userStates[userId].Add(commandName, new SortedDictionary<string, dynamic>());
 
             if (extraInfo.Length > 0)
             {
@@ -79,21 +79,21 @@ namespace TaigaBotCS.Services
             }
         }
 
-        public static Dictionary<string, dynamic> GetUserRecord(string commandName, ulong userId)
+        public static SortedDictionary<string, dynamic> GetUserRecord(string commandName, ulong userId)
         {
             if (!_userStates.ContainsKey(userId))
-                _userStates.Add(userId, new Dictionary<string, Dictionary<string, dynamic>>());
+                _userStates.Add(userId, new SortedDictionary<string, SortedDictionary<string, dynamic>>());
 
             if (!_userStates[userId].ContainsKey(commandName))
-                _userStates[userId].Add(commandName, new Dictionary<string, dynamic>());
+                _userStates[userId].Add(commandName, new SortedDictionary<string, dynamic>());
 
             return _userStates[userId][commandName];
         }
 
-        public static Dictionary<string, Dictionary<string, dynamic>> GetUserRecord(ulong userId)
+        public static SortedDictionary<string, SortedDictionary<string, dynamic>> GetUserRecord(ulong userId)
         {
             if (!_userStates.ContainsKey(userId))
-                _userStates.Add(userId, new Dictionary<string, Dictionary<string, dynamic>>());
+                _userStates.Add(userId, new SortedDictionary<string, SortedDictionary<string, dynamic>>());
 
             return _userStates[userId];
         }
