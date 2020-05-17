@@ -6,7 +6,6 @@ using Discord.Commands;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Threading.Tasks;
 using TaigaBotCS.Interfaces;
 using TaigaBotCS.Services;
@@ -17,8 +16,6 @@ namespace TaigaBotCS.Commands
     [Attributes.Command("route", "info", null, null, 5.0f)]
     public class Route : ModuleBase<SocketCommandContext>, ICharacterRoutable, IMemberConfigurable
     {
-        private const string _routePath = "./storage/routes.json";
-        private readonly List<CharacterObject> _routes;
         private readonly string[] _secretRouteEmoteIds = new[]
         {
             "703591584305774662",
@@ -31,12 +28,6 @@ namespace TaigaBotCS.Commands
         private Dictionary<ulong, Dictionary<string, object>> _routeCommandTexts
             = new Dictionary<ulong, Dictionary<string, object>>();
         private Random _rng = new Random();
-
-        public Route() : base()
-        {
-            var rawJson = File.ReadAllText(_routePath);
-            _routes = Utf8Json.JsonSerializer.Deserialize<List<CharacterObject>>(rawJson);
-        }
 
         [Command("route")]
         public async Task RouteAsync(params string[] _)
@@ -144,13 +135,13 @@ namespace TaigaBotCS.Commands
 #pragma warning disable CS8509
             return res switch
             {
-                var x when x >= 0 && x <= 14 => _routes[0],
-                var x when x >= 15 && x <= 19 => _routes[1],
-                var x when x >= 20 && x <= 35 => _routes[2],
-                var x when x >= 36 && x <= 51 => _routes[3],
-                var x when x >= 52 && x <= 67 => _routes[4],
-                var x when x >= 68 && x <= 83 => _routes[5],
-                var x when x >= 84 && x <= 99 => _routes[6]
+                var x when x >= 0 && x <= 14 => PersistenceService.Routes[0],
+                var x when x >= 15 && x <= 19 => PersistenceService.Routes[1],
+                var x when x >= 20 && x <= 35 => PersistenceService.Routes[2],
+                var x when x >= 36 && x <= 51 => PersistenceService.Routes[3],
+                var x when x >= 52 && x <= 67 => PersistenceService.Routes[4],
+                var x when x >= 68 && x <= 83 => PersistenceService.Routes[5],
+                var x when x >= 84 && x <= 99 => PersistenceService.Routes[6]
             };
         }
     }

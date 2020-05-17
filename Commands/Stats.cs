@@ -1,6 +1,8 @@
-﻿using Discord.Commands;
+﻿using Discord;
+using Discord.Commands;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using TaigaBotCS.Interfaces;
@@ -49,29 +51,49 @@ namespace TaigaBotCS.Commands
                 .Replace("{user}", Context.User.Username)
                 .Replace("{command}", commandName);
 
-            var records = PersistenceService.GetUserRecord(commandName, Context.User.Id);
+            var embed = GetEmbeddedMessage(msg);
 
-            foreach (var record in records)
+            var records = PersistenceService.GetUserRecord(commandName, Context.User.Id);
+            if (records.First().Value is int)
             {
-                if (record.Value is int)
+                var orderedRecords = records.OrderByDescending(pair => pair.Value);
+
+                foreach (var record in orderedRecords)
                 {
-                    msg += $"**{record.Key}**: {record.Value} time(s)\n";
+                    embed.Fields.Add(new EmbedFieldBuilder
+                    {
+                        IsInline = true,
+                        Name = $"**{record.Key}**",
+                        Value = record.Value
+                    });
                 }
-                else
+            }
+            else
+            {
+                foreach (var record in records)
                 {
-                    msg += $"**{record.Key}**: \n";
+                    var field = new EmbedFieldBuilder
+                    {
+                        IsInline = true,
+                        Name = $"**{record.Key}**",
+                        Value = "- "
+                    };
 
                     foreach (var ending in record.Value)
                     {
-                        msg += $"    - __{ending.Key}__: {ending.Value} time(s)\n";
+                        field.Value += $"__{ending.Key}__: {ending.Value}\n";
                     }
+
+                    field.Value = field.Value.ToString().Replace("- ", string.Empty);
+
+                    embed.Fields.Add(field);
                 }
             }
 
             if (Helper.GetMemberConfig(Context.User.Id)?.Language == "jp")
                 msg.Replace("time(s)", "回");
 
-            await Context.Channel.SendMessageAsync(msg);
+            await Context.Channel.SendMessageAsync(embed: embed.Build());
         }
 
         [Command("stats")]
@@ -84,26 +106,53 @@ namespace TaigaBotCS.Commands
                 .Replace("{user}", Context.User.Username)
                 .Replace("{command}", string.Join(", ", _availableCommands));
 
+            var embed = GetEmbeddedMessage(msg);
+
             var records = PersistenceService.GetUserRecord(Context.User.Id);
+            var textInfo = new CultureInfo("en-us", false).TextInfo;
 
             foreach (var record in records)
             {
-                msg += $"`{record.Key}` - \n";
-
-                foreach (var rec in record.Value)
+                embed.Fields.Add(new EmbedFieldBuilder
                 {
-                    if (rec.Value is int)
+                    IsInline = false,
+                    Name = $"**{textInfo.ToTitleCase(record.Key)}**",
+                    Value = _userLocalization["info"].ToString().Replace("{command}", record.Key)
+                });
+
+                if (record.Value.First().Value is int)
+                {
+                    var orderedRecords = record.Value.OrderByDescending(pair => pair.Value);
+
+                    foreach (var rec in orderedRecords)
                     {
-                        msg += $"**{rec.Key}**: {rec.Value} time(s)\n";
+                        embed.Fields.Add(new EmbedFieldBuilder
+                        {
+                            IsInline = true,
+                            Name = rec.Key,
+                            Value = rec.Value
+                        });
                     }
-                    else
+                }
+                else
+                {
+                    foreach (var rec in record.Value)
                     {
-                        msg += $"**{rec.Key}**: \n";
+                        var field = new EmbedFieldBuilder
+                        {
+                            IsInline = true,
+                            Name = rec.Key,
+                            Value = "- "
+                        };
 
                         foreach (var ending in rec.Value)
                         {
-                            msg += $"    - __{ending.Key}__: {ending.Value} time(s)\n";
+                            field.Value += $"__{ending.Key}__: {ending.Value}\n";
                         }
+
+                        field.Value = field.Value.ToString().Replace("- ", string.Empty);
+
+                        embed.Fields.Add(field);
                     }
                 }
             }
@@ -111,7 +160,7 @@ namespace TaigaBotCS.Commands
             if (Helper.GetMemberConfig(Context.User.Id)?.Language == "jp")
                 msg.Replace("time(s)", "回");
 
-            await Context.Channel.SendMessageAsync(msg);
+            await Context.Channel.SendMessageAsync(embed: embed.Build());
         }
 
         [Command("stats")]
@@ -133,6 +182,21 @@ namespace TaigaBotCS.Commands
 
             if (!string.IsNullOrEmpty(msg))
                 await Context.Channel.SendMessageAsync(msg);
+        }
+
+        private EmbedBuilder GetEmbeddedMessage(string baseMessage)
+        {
+            var user = Context.User as IGuildUser;
+
+            return new EmbedBuilder
+            {
+                Author = new EmbedAuthorBuilder
+                {
+                    IconUrl = Context.User.GetAvatarUrl(),
+                    Name = user.Nickname ?? user.Username
+                },
+                Description = baseMessage
+            };
         }
     }
 }

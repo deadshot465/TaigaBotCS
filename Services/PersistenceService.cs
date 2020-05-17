@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using TaigaBotCS.Utility;
 using Utf8Json;
 
 namespace TaigaBotCS.Services
@@ -12,14 +13,27 @@ namespace TaigaBotCS.Services
     {
         public static List<string> DialogBackgrounds { get; private set; }
         public static List<string> DialogCharacters { get; private set; }
-
-        private const string _userRecordPath = "./storage/userRecords.json";
+        public static List<CharacterObject> Routes { get; private set; }
+        public static List<CharacterObject> Valentines { get; private set; }
 
         private static SortedDictionary<ulong, SortedDictionary<string, SortedDictionary<string, dynamic>>> _userStates
             = new SortedDictionary<ulong, SortedDictionary<string, SortedDictionary<string, dynamic>>>();
 
         private static Dictionary<string, object> _savedData
             = new Dictionary<string, object>();
+
+        private const string _userRecordPath = "./storage/userRecords.json";
+        private const string _routePath = "./storage/routes.json";
+        private const string _valentinePath = "./storage/valentines.json";
+
+        public static async Task Initialize()
+        {
+            var routeJson = await File.ReadAllBytesAsync(_routePath);
+            Routes = JsonSerializer.Deserialize<List<CharacterObject>>(routeJson);
+
+            var valentineJson = await File.ReadAllBytesAsync(_valentinePath);
+            Valentines = JsonSerializer.Deserialize<List<CharacterObject>>(valentineJson);
+        }
 
         public static async Task LoadDialogData()
         {
@@ -56,7 +70,7 @@ namespace TaigaBotCS.Services
             {
                 if (!_userStates[userId][commandName].ContainsKey(target))
                 {
-                    _userStates[userId][commandName].Add(target, new Dictionary<string, uint>());
+                    _userStates[userId][commandName].Add(target, new SortedDictionary<string, uint>());
                 }
 
                 if (!_userStates[userId][commandName][target].ContainsKey(extraInfo[0]))

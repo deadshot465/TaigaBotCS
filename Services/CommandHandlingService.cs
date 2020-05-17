@@ -56,6 +56,7 @@ namespace TaigaBotCS.Services
 
         public async Task InitializeAsync()
         {
+            await PersistenceService.Initialize();
             await PersistenceService.LoadDialogData();
             await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
         }

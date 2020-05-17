@@ -6,30 +6,19 @@ using Discord.Commands;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Threading.Tasks;
 using TaigaBotCS.Interfaces;
 using TaigaBotCS.Services;
 using TaigaBotCS.Utility;
-using Utf8Json;
 
 namespace TaigaBotCS.Commands
 {
     [Attributes.Command("valentine", "info", null, new string[] { "lover", "v" }, 5.0f)]
     public class Valentine : ModuleBase<SocketCommandContext>, ICharacterRoutable, IMemberConfigurable
     {
-        private const string _valentinePath = "./storage/valentines.json";
-        private readonly List<CharacterObject> _valentines;
-
         private Dictionary<ulong, Dictionary<string, object>> _valentineCommandTexts
             = new Dictionary<ulong, Dictionary<string, object>>();
         private Random _rng = new Random();
-
-        public Valentine() : base()
-        {
-            var rawJson = File.ReadAllText(_valentinePath);
-            _valentines = JsonSerializer.Deserialize<List<CharacterObject>>(rawJson);
-        }
 
         [Command("valentine")]
         [Alias("lover", "v")]
@@ -127,6 +116,6 @@ namespace TaigaBotCS.Commands
         }
 
         private CharacterObject GetValentine()
-            => _valentines[_rng.Next(0, _valentines.Count)];
+            => PersistenceService.Valentines[_rng.Next(0, PersistenceService.Valentines.Count)];
     }
 }
