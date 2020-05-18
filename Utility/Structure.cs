@@ -64,6 +64,7 @@ namespace TaigaBotCS.Utility
         public Dictionary<string, object> owoify;
         public Dictionary<string, object> remind;
         public Dictionary<string, object> stats;
+        public Dictionary<string, object> hirosay;
     }
 
     public struct LocalizationObject
@@ -77,6 +78,16 @@ namespace TaigaBotCS.Utility
         public string background;
         public string character;
         public string text;
+    }
+
+    public struct SpecializedDialogObject
+    {
+        public string Background;
+        public string Text;
+        public int Pose;
+        public string Clothes;
+        public string Face;
+        public bool IsHiddenCharacter;
     }
 
     public struct CharacterObject

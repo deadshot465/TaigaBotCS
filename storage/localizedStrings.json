@@ -255,6 +255,23 @@
         },
         "info": "Records for `{command}`",
         "result": "Here's {user}'s records with `{command}`\n"
+      },
+      "hirosay": {
+        "description": "Returns an image of Hiro saying anything you want",
+        "usage": "Run `hirosay <background> <pose No.> <clothes> <face/expression> <message>` or `hirosay <pose No.> <clothes> <face/expression> <message>` to give you an image of Hiro with a custom dialog!\nAvailable backgrounds: `{backgrounds}`\nRun `hirosay help` to get detailed descriptions via DM.",
+        "errors": {
+          "length_too_short": "This command requires four arguments: `hirosay [background] <pose No.> <clothes> <face/expression> <message>` ([] is optional). Run `hirosay help` to get detailed descriptions via DM.",
+          "background_not_found": "Sorry, but I couldn't find `{background}` as a location\nAvailable backgrounds are: `{backgrounds}`.",
+          "no_message": "At least give me something to send, you dumbass.",
+          "message_too_long": "Sorry, the message limit is 120 characters for latin characters, 78 characters for Japanese <:TaigaAck2:700006264507465778>",
+          "wrong_character_set": "I don't do emotes, mentions, non-latin and non-Japanese characters",
+          "cooldown": "I only have two hands, not an octopus. Bother me again later. <:TaigaAngry:699705315519889479>",
+          "pose_not_exist": "Hiro doesn't have a pose of this number.",
+          "clothes_not_exist": "I heard Hiro doesn't have such clothes.",
+          "face_not_exist": "Knowing Hiro, I know he would never show such face.",
+          "generic": "An error just happened. I blame Rhakon. <:TaigaLOL:700004692079542333> - {json}"
+        },
+        "result": "ほらー"
       }
     }
   },
@@ -517,6 +534,23 @@
         },
         "info": "`{command}`の使用記録",
         "result": "{user}の`{command}`使用記録は\n"
+      },
+      "hirosay": {
+        "description": "広に自分が言いたいことを言わせる",
+        "usage": "`hirosay <背景> <ポーズ番号> <服> <表情> <メッセージ>`もしくは`hirosay <ポーズ番号> <服> <表情> <メッセージ>`を実行し、秋葉広に自分が言いたいことを言わせる！\n可能の背景は：`{backgrounds}`\n`hirosay help`を実行し、詳しい説明をDMで取得する。",
+        "errors": {
+          "length_too_short": "この命令を使う際は四つの引数が必要だ：`hirosay [背景] <ポーズ番号> <服> <表情> <メッセージ>` ([]は選択可能)",
+          "background_not_found": "ごめん、`{background}`という場所は見つからなかった。\n可能の背景は：`{backgrounds}`。",
+          "no_message": "せめて何が言いたいのか教えてくれ、馬鹿野郎。",
+          "message_too_long": "わるい、メッセージの制限は英数字120文字数、日本語78文字数だ <:TaigaAck2:700006264507465778>",
+          "wrong_character_set": "絵文字、メンションとラテン・日本語文字以外の言語や文字はしねぇよ。",
+          "cooldown": "俺は両手しかないだろう。タコでもないし。少し黙ってくれ <:TaigaAngry:699705315519889479>",
+          "pose_not_exist": "広はこの番号のポーズがないんだ！",
+          "clothes_not_exist": "広はこの服を持っていないはずだ。",
+          "face_not_exist": "広は絶対こんな表情をしねぇよ。",
+          "generic": "エラーが出てきた。絶対Rhakonのせいだ。 <:TaigaLOL:700004692079542333> - {json}"
+        },
+        "result": "ほらー"
       }
     }
   }

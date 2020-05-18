@@ -44,6 +44,17 @@ namespace TaigaBotCS.Commands
                 return;
             }
 
+            string[] matureHiroCommandNames = new[]
+            {
+                "mhiro", "mhirosay", "maturehiro", "maturehirosay"
+            };
+
+            if (matureHiroCommandNames.Contains(commandName.Trim().ToLower()))
+            {
+                await Context.Channel.SendMessageAsync(helpErrors["no_command"].ToString());
+                return;
+            }
+
             var commandExist = allCommands
                 .Where(t =>
                 {

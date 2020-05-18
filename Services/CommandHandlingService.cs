@@ -108,8 +108,17 @@ namespace TaigaBotCS.Services
                 .Where(t =>
                 {
                     var attr = t.GetCustomAttribute<Commands.Attributes.CommandAttribute>();
-                    return attr.Name == command ||
-                    (attr.Aliases != null && attr.Aliases.Contains(command));
+                    string[] matureHiroCommandNames = new[]
+                    {
+                        "mhiro", "maturehiro", "mhirosay", "maturehirosay"
+                    };
+
+                    string cmd = command;
+                    if (matureHiroCommandNames.Contains(command))
+                        cmd = "hirosay";
+
+                    return attr.Name == cmd ||
+                    (attr.Aliases != null && attr.Aliases.Contains(cmd));
                 })
                 .First().GetCustomAttribute<Commands.Attributes.CommandAttribute>();
             var cooldownAmount = attribute.Cooldown * 1000.0;
