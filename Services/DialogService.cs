@@ -20,8 +20,8 @@ namespace TaigaBotCS.Services
         private readonly HttpClient _http;
         private readonly HttpClientHandler _handler;
 
-        private Dictionary<int, Dictionary<string, List<string>>> _specializationInfo
-            = new Dictionary<int, Dictionary<string, List<string>>>();
+        private Dictionary<string, Dictionary<int, Dictionary<string, List<string>>>> _specializationInfo
+            = new Dictionary<string, Dictionary<int, Dictionary<string, List<string>>>>();
 
         public DialogService(HttpClient http)
         {
@@ -90,8 +90,11 @@ namespace TaigaBotCS.Services
 
         public async Task<Dictionary<int, Dictionary<string, List<string>>>> GetSpecializationInformation(string character)
         {
-            if (_specializationInfo != null && _specializationInfo.Count > 0)
-                return _specializationInfo;
+            if (_specializationInfo != null &&
+                _specializationInfo.Count > 0 &&
+                _specializationInfo.ContainsKey(character) &&
+                _specializationInfo[character].Count > 0)
+                return _specializationInfo[character];
 
             var response = await _http.GetAsync($"https://tetsukizone.com/api/dialog/{character}");
 
@@ -107,19 +110,22 @@ namespace TaigaBotCS.Services
             var test = obj["Poses"];
             var poseInfos = obj["Poses"] as Dictionary<string, object>;
 
+            if (!_specializationInfo.ContainsKey(character))
+                _specializationInfo.Add(character, new Dictionary<int, Dictionary<string, List<string>>>());
+
             foreach (var item in poseInfos)
             {
-                _specializationInfo.Add(int.Parse(item.Key), new Dictionary<string, List<string>>());
+                _specializationInfo[character].Add(int.Parse(item.Key), new Dictionary<string, List<string>>());
                 var info = item.Value as Dictionary<string, object>;
 
                 foreach (var _item in info)
                 {
                     var list = (_item.Value as List<object>).Cast<string>().OrderBy(x => x);
-                    _specializationInfo[int.Parse(item.Key)].Add(_item.Key, new List<string>(list));
+                    _specializationInfo[character][int.Parse(item.Key)].Add(_item.Key, new List<string>(list));
                 }
             }
 
-            return _specializationInfo;
+            return _specializationInfo[character];
         }
     }
 }

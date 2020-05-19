@@ -2,6 +2,7 @@
 using Discord.Commands;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using TaigaBotCS.Services;
@@ -40,14 +41,16 @@ namespace TaigaBotCS.Commands
             if (help.Trim().ToLower() == "help")
             {
                 var specializationInfo = await DialogService.GetSpecializationInformation(character);
+                var textInfo = new CultureInfo("en-us", false).TextInfo;
                 var embed = new EmbedBuilder
                 {
                     Author = new EmbedAuthorBuilder
                     {
                         IconUrl = Context.User.GetAvatarUrl(),
-                        Name = Context.User.Username
+                        Name = Context.User.Username,
                     },
                     Color = new Color(0xff6600),
+                    Description = $"Detailed usage for `{textInfo.ToTitleCase(character)}Say`",
                     Fields = new List<EmbedFieldBuilder>
                     {
                         {
@@ -90,12 +93,46 @@ namespace TaigaBotCS.Commands
                         Value = allClothes
                     });
 
-                    embed.Fields.Add(new EmbedFieldBuilder
+                    if (allFaces.Length >= 1024)
                     {
-                        IsInline = false,
-                        Name = facesTitle,
-                        Value = allFaces
-                    });
+                        var faceMsgList = new List<string>();
+                        var lastStart = 0;
+                        var stride = 1000;
+                        var lastPeriodIndex = 0;
+
+                        do
+                        {
+                            if (lastStart + stride > allFaces.Length)
+                            {
+                                faceMsgList.Add(allFaces.Substring(lastStart));
+                                break;
+                            }
+                            lastPeriodIndex = allFaces.Substring(lastStart, lastStart + stride).LastIndexOf(',');
+                            var str = allFaces.Substring(lastStart, lastPeriodIndex);
+                            faceMsgList.Add(str);
+                            lastStart = lastPeriodIndex + 1;
+
+                        } while (true);
+
+                        foreach (var msg in faceMsgList)
+                        {
+                            embed.Fields.Add(new EmbedFieldBuilder
+                            {
+                                IsInline = false,
+                                Name = facesTitle,
+                                Value = msg
+                            });
+                        }
+                    }
+                    else
+                    {
+                        embed.Fields.Add(new EmbedFieldBuilder
+                        {
+                            IsInline = false,
+                            Name = facesTitle,
+                            Value = allFaces
+                        });
+                    }
                 }
 
                 await Context.Channel.SendMessageAsync("Check your DM. <:chibitaiga:697893400891883531>");

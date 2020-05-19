@@ -65,6 +65,7 @@ namespace TaigaBotCS.Utility
         public Dictionary<string, object> remind;
         public Dictionary<string, object> stats;
         public Dictionary<string, object> hirosay;
+        public Dictionary<string, object> taigasay;
     }
 
     public struct LocalizationObject
