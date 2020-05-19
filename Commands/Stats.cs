@@ -54,7 +54,7 @@ namespace TaigaBotCS.Commands
             var embed = GetEmbeddedMessage(msg);
 
             var records = PersistenceService.GetUserRecord(commandName, Context.User.Id);
-            if (records.First().Value is int)
+            if (records.First().Value is int || records.First().Value is double)
             {
                 var orderedRecords = records.OrderByDescending(pair => pair.Value);
 
@@ -120,7 +120,7 @@ namespace TaigaBotCS.Commands
                     Value = _userLocalization["info"].ToString().Replace("{command}", record.Key)
                 });
 
-                if (record.Value.First().Value is int)
+                if (record.Value.First().Value is int || record.Value.First().Value is double)
                 {
                     var orderedRecords = record.Value.OrderByDescending(pair => pair.Value);
 

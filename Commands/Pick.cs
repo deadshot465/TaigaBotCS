@@ -58,7 +58,7 @@ namespace TaigaBotCS.Commands
             }
             else
             {
-                optionList.Insert(0, times);
+                optionList[0] = $"{times} {optionList[0]}";
             }
             
             if (optionList.Count <= 0)

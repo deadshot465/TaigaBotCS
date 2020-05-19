@@ -110,7 +110,7 @@ namespace TaigaBotCS.Commands
                     });
                 }
 
-                await Context.Channel.SendMessageAsync("Check your DM. <:TaigaCute:514293667507208193>");
+                await Context.Channel.SendMessageAsync("Check your DM. <:chibitaiga:697893400891883531>");
                 await Context.User.SendMessageAsync(embed: embed.Build());
             }
             else

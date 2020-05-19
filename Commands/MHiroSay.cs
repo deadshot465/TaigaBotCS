@@ -29,8 +29,8 @@ namespace TaigaBotCS.Commands
             var usage = hiroSayText["usage"].ToString()
                 .Replace("{backgrounds}", string.Join(", ", _backgroundString));
 
-            TypeDescriptor.AddAttributes(typeof(HiroSay),
-                new Attributes.CommandAttribute("hirosay", "fun", usage, new[] { "mhiro", "maturehiro", "maturehirosay" }));
+            TypeDescriptor.AddAttributes(typeof(MHiroSay),
+                new Attributes.CommandAttribute("mhirosay", "fun", usage, new[] { "mhiro", "maturehiro", "maturehirosay" }));
         }
 
         [Command("mhirosay")]
@@ -110,7 +110,7 @@ namespace TaigaBotCS.Commands
                     });
                 }
 
-                await Context.Channel.SendMessageAsync("Check your DM. <:TaigaCute:514293667507208193>");
+                await Context.Channel.SendMessageAsync("Check your DM. <:chibitaiga:697893400891883531>");
                 await Context.User.SendMessageAsync(embed: embed.Build());
             }
             else

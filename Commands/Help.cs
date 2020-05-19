@@ -160,7 +160,9 @@ namespace TaigaBotCS.Commands
                         return new
                         {
                             Category = _categories["type"].ToString(),
-                            Commands = string.Join(' ', _names.Select(name => '`' + name + '`')),
+                            Commands = string.Join(' ', _names
+                            .Where(name => name != "mhirosay")
+                            .Select(name => '`' + name + '`')),
                             Icon = _categories["icon"].ToString()
                         };
                     })
