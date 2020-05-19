@@ -58,7 +58,10 @@ namespace TaigaBotCS.Commands
             }
             else
             {
-                optionList[0] = $"{times} {optionList[0]}";
+                optionList = Context.Message.Content.Substring(8)
+                    .Split('|')
+                    .Select(s => s.Trim())
+                    .ToList();
             }
             
             if (optionList.Count <= 0)
