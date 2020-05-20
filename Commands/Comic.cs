@@ -35,7 +35,7 @@ namespace TaigaBotCS.Commands
             InvalidCommand, MessageTooShort, NoSuchSpecialization,
             NoSuchBackground, NoSuchPose, NoSuchCloth, NoSuchFace,
             NoSuchCharacter, NoAttachment, MessageTooLong,
-            WrongCharacterSet
+            WrongCharacterSet, TooManyImages
         }
 
         [Command("comic")]
@@ -64,6 +64,12 @@ namespace TaigaBotCS.Commands
             var content = await response.Content.ReadAsStringAsync();
             var strings = Regex.Split(content, @"[\r\n]")
                 .Where(str => !string.IsNullOrEmpty(str) && !string.IsNullOrWhiteSpace(str));
+
+            if (strings.Count() > 5)
+            {
+                await HandleErrorAsync(ComicError.TooManyImages);
+                return;
+            }
 
             var imageList = new List<object>();
 
@@ -249,6 +255,7 @@ namespace TaigaBotCS.Commands
                 ComicError.NoAttachment => "The command has to be called with an attachment.",
                 ComicError.MessageTooLong => "The maximum length of text is 120 for English/ASCII characters, 78 for Japanese characters.",
                 ComicError.WrongCharacterSet => "This command cannot be used with non-English or non-Japanese text.",
+                ComicError.TooManyImages => "The maximum number of images allowed is 5.",
                 _ => string.Empty
             };
 
