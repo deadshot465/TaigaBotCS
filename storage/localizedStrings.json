@@ -289,6 +289,14 @@
           "generic": "An error just happened. I blame Rhakon. <:TaigaLOL:700004692079542333> - {json}"
         },
         "result": "Here you go~!"
+      },
+      "comic": {
+        "description": "Make a simple and short Camp Buddy comic.",
+        "usage": "Run `comic` and upload the file at the same time to make a simple manga.",
+        "errors": {
+
+        },
+        "result": "Here you go~!"
       }
     }
   },
@@ -583,6 +591,14 @@
           "clothes_not_exist": "俺は俺の彼氏じゃない。こんなダサい服は俺が持っていない。",
           "face_not_exist": "あんな馬鹿馬鹿しい顔は本格的なピエロに任せろ。俺はしねぇよ。",
           "generic": "エラーが出てきた。絶対Rhakonのせいだ。 <:TaigaLOL:700004692079542333> - {json}"
+        },
+        "result": "ほらー"
+      },
+      "comic": {
+        "description": "簡単なキャンプバディ漫画を作る",
+        "usage": "`comic`を実行し、そして同時にファイルをアップロードして、簡単なキャンプバディ漫画を作る。",
+        "errors": {
+          
         },
         "result": "ほらー"
       }

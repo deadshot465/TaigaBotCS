@@ -223,5 +223,14 @@
     "animal": "Jackal",
     "emoteId": "586763368044429312",
     "age": 19
+  },
+  {
+    "birthday": "Unknown",
+    "color": "276097",
+    "name": "Rayne",
+    "description": "Everything about Rayne is still a mystery. All we know is that he's a musician and it seems that he's into artistic and music stuffs. He's always got a headphone around his neck so he could listen to the music anytime.",
+    "animal": "Unknown",
+    "emoteId": "667909099425628163",
+    "age": 19
   }
 ]

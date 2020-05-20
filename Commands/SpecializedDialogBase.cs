@@ -168,15 +168,15 @@ namespace TaigaBotCS.Commands
                 return;
             }
 
-            if ((_japaneseRegex.IsMatch(content) && content.Length > 78) || content.Length > 120)
+            if ((DialogService.JapaneseRegex.IsMatch(content) && content.Length > 78) || content.Length > 120)
             {
                 _ = HandleErrorAsync(ConversationError.MessageTooLong, string.Empty);
                 return;
             }
 
-            if (_emojiRegex.IsMatch(content) ||
-                _emoteMentionsRegex.IsMatch(content) ||
-                _nonAsciiAndJapaneseRegex.IsMatch(content))
+            if (DialogService.EmojiRegex.IsMatch(content) ||
+                DialogService.EmoteMentionsRegex.IsMatch(content) ||
+                DialogService.NonASCIIAndJapaneseRegex.IsMatch(content))
             {
                 _ = HandleErrorAsync(ConversationError.WrongCharacterSet, string.Empty);
                 return;

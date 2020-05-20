@@ -9,15 +9,24 @@
   <ItemGroup>
     <PackageReference Include="Discord.Net" Version="2.2.0" />
     <PackageReference Include="DotNetEnv" Version="1.4.0" />
+    <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="7.17.0.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.0-preview.3.20215.2" />
     <PackageReference Include="Owoify.Net" Version="1.0.1" />
     <PackageReference Include="Utf8Json" Version="1.3.7" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="CampBuddyDialogCS">
+      <HintPath>Lib\CampBuddyDialogCS.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <None Update=".env">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update=".env_hiro">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Lib\CampBuddyDialogCS.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Settings.job">

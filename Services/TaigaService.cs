@@ -142,10 +142,10 @@ namespace TaigaBotCS.Services
                     {
                         var stream = await _dialogService.GetDialogAsync(null, new DialogObject
                         {
-                            background = PersistenceService
+                            Background = PersistenceService
                             .DialogBackgrounds[_rng.Next(0, PersistenceService.DialogBackgrounds.Count)],
-                            character = "taiga",
-                            text = "Hiro will be terribly wrong if he thinks he can steal Keitaro from me!"
+                            Character = "taiga",
+                            Text = "Hiro will be terribly wrong if he thinks he can steal Keitaro from me!"
                         }, string.Empty);
 
                         if (stream != null)

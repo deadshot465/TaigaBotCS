@@ -76,9 +76,9 @@ namespace TaigaBotCS.Utility
 
     public struct DialogObject
     {
-        public string background;
-        public string character;
-        public string text;
+        public string Background;
+        public string Character;
+        public string Text;
     }
 
     public struct SpecializedDialogObject
