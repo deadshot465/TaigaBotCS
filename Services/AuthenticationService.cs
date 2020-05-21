@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Net.Mime;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Utf8Json;
@@ -33,12 +35,12 @@ namespace TaigaBotCS.Services
             var serializedContent = Utf8Json.JsonSerializer.ToJsonString(new
             {
                 UserName = Env.GetString("LOGIN_NAME"),
-                Password = Env.GetString("LOGIN_PASS")
+                Password = Env.GetString("LOGIN_PASS"),
             });
 
             var request = new HttpRequestMessage
             {
-                Content = new StringContent(serializedContent),
+                Content = new StringContent(serializedContent, Encoding.UTF8, MediaTypeNames.Application.Json),
                 Method = HttpMethod.Post,
                 RequestUri = new Uri("https://tetsukizone.com/api/login"),
                 Headers =
