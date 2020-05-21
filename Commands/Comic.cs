@@ -27,7 +27,8 @@ namespace TaigaBotCS.Commands
             {
                 { "hirosay", "hiro" },
                 { "mhirosay", "hiro" },
-                { "taigasay", "taiga" }
+                { "taigasay", "taiga" },
+                { "keitarosay", "keitaro" }
             };
 
         private enum ComicError

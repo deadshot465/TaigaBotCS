@@ -297,6 +297,23 @@
 
         },
         "result": "Here you go~!"
+      },
+      "keitarosay": {
+        "description": "Returns an image of Keitaro saying anything you want",
+        "usage": "Run `keitarosay <background> <pose No.> <clothes> <face/expression> <message>` or `keitarosay <pose No.> <clothes> <face/expression> <message>` to give you an image of Keitaro with a custom dialog!\nAvailable backgrounds: `{backgrounds}`\nRun `keitarosay help` to get detailed descriptions via DM.",
+        "errors": {
+          "length_too_short": "This command requires four arguments: `keitarosay [background] <pose No.> <clothes> <face/expression> <message>` ([] is optional). Run `keitarosay help` to get detailed descriptions via DM.",
+          "background_not_found": "Sorry, but I couldn't find `{background}` as a location\nAvailable backgrounds are: `{backgrounds}`.",
+          "no_message": "Obviously my boyfriend has nothing to tell you.",
+          "message_too_long": "Sorry, the message limit is 120 characters for latin characters, 78 characters for Japanese <:TaigaAck2:700006264507465778>",
+          "wrong_character_set": "I don't do emotes, mentions, non-latin and non-Japanese characters",
+          "cooldown": "I only have two hands, not an octopus. Bother me again later. <:TaigaAngry:699705315519889479>",
+          "pose_not_exist": "Stop making fun of my boyfriend and ask him to do such silly poses.",
+          "clothes_not_exist": "I decide to buy clothes for my boyfriend, so he won't have a stupid cloth like the one you appointed.",
+          "face_not_exist": "Stop bothering my boyfriend and find a real clown to make such face for you.",
+          "generic": "An error just happened. I blame Rhakon. <:TaigaLOL:700004692079542333> - {json}"
+        },
+        "result": "Here you go~!"
       }
     }
   },
@@ -598,7 +615,24 @@
         "description": "簡単なキャンプバディ漫画を作る",
         "usage": "`comic`を実行し、そして同時にファイルをアップロードして、簡単なキャンプバディ漫画を作る。",
         "errors": {
-          
+
+        },
+        "result": "ほらー"
+      },
+      "keitarosay": {
+        "description": "慶太郎に自分が言いたいことを言わせる",
+        "usage": "`keitarosay <背景> <ポーズ番号> <服> <表情> <メッセージ>`もしくは`keitarosay <ポーズ番号> <服> <表情> <メッセージ>`を実行し、赤虎たいがに自分が言いたいことを言わせる！\n可能の背景は：`{backgrounds}`\n`keitarosay help`を実行し、詳しい説明をDMで取得する。",
+        "errors": {
+          "length_too_short": "この命令を使う際は四つの引数が必要だ：`keitarosay [背景] <ポーズ番号> <服> <表情> <メッセージ>` ([]は選択可能)",
+          "background_not_found": "ごめん、`{background}`という場所は見つからなかった。\n可能の背景は：`{backgrounds}`。",
+          "no_message": "俺の慶太郎はお前と話すことはない。",
+          "message_too_long": "わるい、メッセージの制限は英数字120文字数、日本語78文字数だ <:TaigaAck2:700006264507465778>",
+          "wrong_character_set": "絵文字、メンションとラテン・日本語文字以外の言語や文字はしねぇよ。",
+          "cooldown": "俺は両手しかないだろう。タコでもないし。少し黙ってくれ <:TaigaAngry:699705315519889479>",
+          "pose_not_exist": "俺の彼氏を揶揄わないでくれ。慶太郎にそういう馬鹿馬鹿しいポーズをさせないでくれ。",
+          "clothes_not_exist": "今後慶太郎の代わりに彼の服を買おうと決めたから、そういうダサい服はもう全部捨てた。",
+          "face_not_exist": "俺の慶太郎を邪魔しないでくれ。本格的なピエロに任せろ、そういう顔は。",
+          "generic": "エラーが出てきた。絶対Rhakonのせいだ。 <:TaigaLOL:700004692079542333> - {json}"
         },
         "result": "ほらー"
       }
