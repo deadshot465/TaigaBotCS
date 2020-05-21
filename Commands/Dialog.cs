@@ -5,7 +5,6 @@ using Discord.Commands;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TaigaBotCS.Interfaces;
 using TaigaBotCS.Services;

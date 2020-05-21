@@ -76,6 +76,7 @@ namespace TaigaBotCS
                 .AddSingleton<MealService>()
                 .AddSingleton<HttpClient>()
                 .AddSingleton<ReminderService>()
+                .AddSingleton<AuthenticationService>()
                 .BuildServiceProvider();
         }
 

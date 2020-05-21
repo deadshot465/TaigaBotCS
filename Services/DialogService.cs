@@ -29,23 +29,30 @@ namespace TaigaBotCS.Services
 
         private readonly HttpClient _http;
         private readonly HttpClientHandler _handler;
+        private readonly AuthenticationService _authenticationService;
 
         private Dictionary<string, Dictionary<int, Dictionary<string, List<string>>>> _specializationInfo
             = new Dictionary<string, Dictionary<int, Dictionary<string, List<string>>>>();
 
-        public DialogService(HttpClient http)
+        public DialogService(HttpClient http, AuthenticationService authenticationService)
         {
             _handler = new HttpClientHandler();
             _handler.ServerCertificateCustomValidationCallback
                 = (sender, cert, chain, sslPolicyErrors) => true;
 
             _http = new HttpClient(_handler);
+            _authenticationService = authenticationService;
         }
 
         public async Task<Stream> GetDialogAsync(ICommandContext context,
             DialogObject obj, string cooldownMessage)
         {
-            var str = Utf8Json.JsonSerializer.ToJsonString(obj);
+            if (_authenticationService.AuthenticationData.expiry < DateTime.Now)
+            {
+                await _authenticationService.Login();
+            }
+
+            var str = JsonSerializer.ToJsonString(obj);
 
             var request = new HttpRequestMessage
             {
@@ -54,7 +61,8 @@ namespace TaigaBotCS.Services
                 Headers =
                 {
                     { HttpRequestHeader.Accept.ToString(), "application/json" },
-                    { HttpRequestHeader.ContentType.ToString(), "application/json" }
+                    { HttpRequestHeader.ContentType.ToString(), "application/json" },
+                    { HttpRequestHeader.Authorization.ToString(), $"Bearer {_authenticationService.AuthenticationData.token}" }
                 },
                 Content = new StringContent(str, Encoding.UTF8, "application/json")
             };
@@ -66,6 +74,11 @@ namespace TaigaBotCS.Services
                 await context.Channel.SendMessageAsync(cooldownMessage);
                 return null;
             }
+            else if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                await _authenticationService.Login();
+                return await GetDialogAsync(context, obj, cooldownMessage);
+            }
 
             return await response.Content.ReadAsStreamAsync();
         }
@@ -73,6 +86,11 @@ namespace TaigaBotCS.Services
         public async Task<Stream> GetDialogAsync(ICommandContext context, string character,
             SpecializedDialogObject obj, string cooldownMessage)
         {
+            if (_authenticationService.AuthenticationData.expiry < DateTime.Now)
+            {
+                await _authenticationService.Login();
+            }
+
             var str = Utf8Json.JsonSerializer.ToJsonString(obj);
 
             var request = new HttpRequestMessage
@@ -82,7 +100,8 @@ namespace TaigaBotCS.Services
                 Headers =
                 {
                     { HttpRequestHeader.Accept.ToString(), "application/json" },
-                    { HttpRequestHeader.ContentType.ToString(), "application/json" }
+                    { HttpRequestHeader.ContentType.ToString(), "application/json" },
+                    { HttpRequestHeader.Authorization.ToString(), $"Bearer {_authenticationService.AuthenticationData.token}" }
                 },
                 Content = new StringContent(str, Encoding.UTF8, "application/json")
             };
@@ -94,6 +113,11 @@ namespace TaigaBotCS.Services
                 await context.Channel.SendMessageAsync(cooldownMessage);
                 return null;
             }
+            else if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                await _authenticationService.Login();
+                return await GetDialogAsync(context, character, obj, cooldownMessage);
+            }
 
             return await response.Content.ReadAsStreamAsync();
         }
@@ -101,6 +125,11 @@ namespace TaigaBotCS.Services
         public async Task<Stream> GetDialogAsync(ICommandContext context, IEnumerable<object> dialogs,
             string cooldownMessage)
         {
+            if (_authenticationService.AuthenticationData.expiry < DateTime.Now)
+            {
+                await _authenticationService.Login();
+            }
+
             var str = JsonSerializer.ToJsonString(dialogs);
 
             var request = new HttpRequestMessage
@@ -110,7 +139,8 @@ namespace TaigaBotCS.Services
                 Headers =
                 {
                     { HttpRequestHeader.Accept.ToString(), "application/json" },
-                    { HttpRequestHeader.ContentType.ToString(), "application/json" }
+                    { HttpRequestHeader.ContentType.ToString(), "application/json" },
+                    { HttpRequestHeader.Authorization.ToString(), $"Bearer {_authenticationService.AuthenticationData.token}" }
                 },
                 Content = new StringContent(str, Encoding.UTF8, "application/json")
             };
@@ -121,6 +151,11 @@ namespace TaigaBotCS.Services
             {
                 await context.Channel.SendMessageAsync(cooldownMessage);
                 return null;
+            }
+            else if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                await _authenticationService.Login();
+                return await GetDialogAsync(context, dialogs, cooldownMessage);
             }
 
             return await response.Content.ReadAsStreamAsync();
