@@ -77,19 +77,20 @@ namespace TaigaBotCS.Services
             _ = _adminService.HandleAdminCommands(message);
 
             var argPos = 0;
-            var botChannelId = DotNetEnv.Env.GetString("BOTCHN");
-            var botModChannelId = DotNetEnv.Env.GetString("BOTMODCHN");
-            var testChannelId = DotNetEnv.Env.GetString("TESTCHN");
+            string[] allowedChannels = new[]
+            {
+                DotNetEnv.Env.GetString("BOTCHN"),
+                DotNetEnv.Env.GetString("BOTMODCHN"),
+                DotNetEnv.Env.GetString("TESTCHN"),
+                DotNetEnv.Env.GetString("ECC_GENCHAN")
+            };
             var messageChannelId = message.Channel.Id.ToString();
 
             // If the command doesn't start with the prefix, ignore it
             if (!message.HasStringPrefix(PREFIX, ref argPos)) return;
 
             // Limit command usages to specific channels
-            if (((botChannelId.Length > 0 &&botModChannelId.Length > 0) &&
-                (messageChannelId != botChannelId &&
-                messageChannelId != botModChannelId)) &&
-                (testChannelId.Length > 0 && messageChannelId != testChannelId))
+            if (!allowedChannels.Contains(messageChannelId))
             {
                 return;
             }
