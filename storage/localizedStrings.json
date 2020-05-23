@@ -314,6 +314,23 @@
           "generic": "An error just happened. I blame Rhakon. <:TaigaLOL:700004692079542333> - {json}"
         },
         "result": "Here you go~!"
+      },
+      "yoichisay": {
+        "description": "Returns an image of Keitaro saying anything you want",
+        "usage": "Run `yoichisay <background> <pose No.> <clothes> <face/expression> <message>` or `yoichisay <pose No.> <clothes> <face/expression> <message>` to give you an image of Yoichi with a custom dialog!\nAvailable backgrounds: `{backgrounds}`\nRun `yoichisay help` to get detailed descriptions via DM.",
+        "errors": {
+          "length_too_short": "This command requires four arguments: `keitarosay [background] <pose No.> <clothes> <face/expression> <message>` ([] is optional). Run `keitarosay help` to get detailed descriptions via DM.",
+          "background_not_found": "Sorry, but I couldn't find `{background}` as a location\nAvailable backgrounds are: `{backgrounds}`.",
+          "no_message": "Apparently Yoichi has nothing to tell you.",
+          "message_too_long": "Sorry, the message limit is 120 characters for latin characters, 78 characters for Japanese <:TaigaAck2:700006264507465778>",
+          "wrong_character_set": "I don't do emotes, mentions, non-latin and non-Japanese characters",
+          "cooldown": "I only have two hands, not an octopus. Bother me again later. <:TaigaAngry:699705315519889479>",
+          "pose_not_exist": "Yoichi doesn't have that kind of pose. Although I want to see it as well. Hah.",
+          "clothes_not_exist": "Yoichi hates clothes after all. He doesn't have that kind of cloth.",
+          "face_not_exist": "If you ask Yoichi to do such face, I bet the wolfboy will be angry as fuck!",
+          "generic": "An error just happened. I blame Rhakon. <:TaigaLOL:700004692079542333> - {json}"
+        },
+        "result": "Here you go~!"
       }
     }
   },
@@ -632,6 +649,23 @@
           "pose_not_exist": "俺の彼氏を揶揄わないでくれ。慶太郎にそういう馬鹿馬鹿しいポーズをさせないでくれ。",
           "clothes_not_exist": "今後慶太郎の代わりに彼の服を買おうと決めたから、そういうダサい服はもう全部捨てた。",
           "face_not_exist": "俺の慶太郎を邪魔しないでくれ。本格的なピエロに任せろ、そういう顔は。",
+          "generic": "エラーが出てきた。絶対Rhakonのせいだ。 <:TaigaLOL:700004692079542333> - {json}"
+        },
+        "result": "ほらー"
+      },
+      "yoichisay": {
+        "description": "陽一に自分が言いたいことを言わせる",
+        "usage": "`yoichisay <背景> <ポーズ番号> <服> <表情> <メッセージ>`もしくは`yoichisay <ポーズ番号> <服> <表情> <メッセージ>`を実行し、雪村陽一に自分が言いたいことを言わせる！\n可能の背景は：`{backgrounds}`\n`yoichisay help`を実行し、詳しい説明をDMで取得する。",
+        "errors": {
+          "length_too_short": "この命令を使う際は四つの引数が必要だ：`yoichisay [背景] <ポーズ番号> <服> <表情> <メッセージ>` ([]は選択可能)",
+          "background_not_found": "ごめん、`{background}`という場所は見つからなかった。\n可能の背景は：`{backgrounds}`。",
+          "no_message": "陽一は多分お前と話すことはないだろう。",
+          "message_too_long": "わるい、メッセージの制限は英数字120文字数、日本語78文字数だ <:TaigaAck2:700006264507465778>",
+          "wrong_character_set": "絵文字、メンションとラテン・日本語文字以外の言語や文字はしねぇよ。",
+          "cooldown": "俺は両手しかないだろう。タコでもないし。少し黙ってくれ <:TaigaAngry:699705315519889479>",
+          "pose_not_exist": "陽一はそういうポーズがないらしい。俺も見たいんだけど。",
+          "clothes_not_exist": "そもそも陽一は服が嫌いだろう。そういう服を持っていないよ、あいつは。",
+          "face_not_exist": "もし陽一にそういう顔をさせたら絶対怒るわ、あいつは。ははは！",
           "generic": "エラーが出てきた。絶対Rhakonのせいだ。 <:TaigaLOL:700004692079542333> - {json}"
         },
         "result": "ほらー"
