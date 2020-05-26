@@ -56,7 +56,7 @@ namespace TaigaBotCS.Commands
             var records = PersistenceService.GetUserRecord(commandName, Context.User.Id);
             if (records.First().Value is int || records.First().Value is double)
             {
-                var orderedRecords = records.OrderByDescending(pair => pair.Value);
+                var orderedRecords = records.OrderByDescending(pair => (double)pair.Value);
 
                 foreach (var record in orderedRecords)
                 {
@@ -122,7 +122,7 @@ namespace TaigaBotCS.Commands
 
                 if (record.Value.First().Value is int || record.Value.First().Value is double)
                 {
-                    var orderedRecords = record.Value.OrderByDescending(pair => pair.Value);
+                    var orderedRecords = record.Value.OrderByDescending(pair => (double)pair.Value);
 
                     foreach (var rec in orderedRecords)
                     {
