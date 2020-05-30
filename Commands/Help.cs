@@ -190,7 +190,7 @@ namespace TaigaBotCS.Commands
                     .Where(t =>
                     {
                         var attr = t.GetCustomAttribute<Attributes.CommandAttribute>();
-                        return attr.Category == category;
+                        return attr.Category == category && attr.Name != "mhirosay";
                     })
                     .Select(t =>
                     {

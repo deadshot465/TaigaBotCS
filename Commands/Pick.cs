@@ -27,11 +27,19 @@ namespace TaigaBotCS.Commands
 #pragma warning disable CS1998
         [Command("pick")]
         [Alias("choose")]
+        [Priority(3)]
         public async Task PickAsync()
             => _ = HandleErrorAsync(PickError.LengthTooShort);
 
         [Command("pick")]
         [Alias("choose")]
+        [Priority(5)]
+        public async Task PickAsync(string discard)
+            => _ = HandleErrorAsync(PickError.LengthTooShort);
+
+        [Command("pick")]
+        [Alias("choose")]
+        [Priority(9)]
         public async Task PickAsync(string times, [Remainder] string options)
         {
             SetMemberConfig(Context.User.Id);
