@@ -70,6 +70,9 @@ namespace TaigaBotCS.Utility
         public Dictionary<string, object> keitarosay;
         public Dictionary<string, object> yoichisay;
         public Dictionary<string, object> yurisay;
+        //public Dictionary<string, object> kieransay;
+        //public Dictionary<string, object> natsumisay;
+        public Dictionary<string, object> time;
     }
 
     public struct LocalizationObject

@@ -348,6 +348,15 @@
           "generic": "An error just happened. I blame Rhakon. <:TaigaLOL:700004692079542333> - {json}"
         },
         "result": "Here you go~!"
+      },
+      "time": {
+        "description": "Query the time of a city",
+        "usage": "Run `time <city name>` to query the current local time of a city.",
+        "errors": {
+          "length_too_short": "This command requires a city name.",
+          "no_result": "Sorry, I couldn't find the city you're querying."
+        },
+        "result": "The current local time of **{city}** is: {time}."
       }
     }
   },
@@ -703,6 +712,15 @@
           "generic": "エラーが出てきた。絶対Rhakonのせいだ。 <:TaigaLOL:700004692079542333> - {json}"
         },
         "result": "ほらー"
+      },
+      "time": {
+        "description": "あらゆる都市の時間を取得する",
+        "usage": "`time <都市の名前>`を実行し、あらゆる都市の時間を取得する。",
+        "errors": {
+          "length_too_short": "この命令は都市の名前が必要だ。",
+          "no_result": "わるい、入力された名前は見当たらなかった。"
+        },
+        "result": "**{city}**今の時間は：{time}。"
       }
     }
   }
