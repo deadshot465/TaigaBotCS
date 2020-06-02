@@ -16,7 +16,14 @@ namespace TaigaBotCS.Commands
     [Attributes.Command("route", "info", null, null, 5.0f)]
     public class Route : ModuleBase<SocketCommandContext>, ICharacterRoutable, IMemberConfigurable
     {
-        private const string _kouGif = "https://tetsukizone.com/images/kou.gif";
+        private readonly string[] _kouGifs = new[]
+        {
+            "https://tetsukizone.com/images/kou.gif",
+            "https://tetsukizone.com/images/kou2.gif",
+            "https://tetsukizone.com/images/kou3.gif",
+            "https://tetsukizone.com/images/kou4.gif",
+            "https://cdn.discordapp.com/emojis/705279783340212265.gif",
+        };
         private readonly string[] _secretRouteEmoteIds = new[]
         {
             "703591584305774662",
@@ -105,7 +112,7 @@ namespace TaigaBotCS.Commands
 
             if (route.name == "Minamoto Kou")
             {
-                embed.ThumbnailUrl = _kouGif;
+                embed.ThumbnailUrl = _kouGifs[_rng.Next(0, _kouGifs.Length)];
             }
 
             PersistenceService.AddUserRecord(GetType().Name.ToLower(), route.name, Context.User.Id, $"{ending} Ending");
