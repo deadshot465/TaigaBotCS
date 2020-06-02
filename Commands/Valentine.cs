@@ -104,7 +104,10 @@ namespace TaigaBotCS.Commands
             => $"https://cdn.discordapp.com/emojis/{emoteId}.png?v=1";
 
         public string GetFirstName(string name)
-            => name.Split(' ')[0];
+        {
+            if (name == "Old Lady") return name;
+            return name.Split(' ')[0];
+        }
 
         public void SetMemberConfig(ulong userId)
         {
