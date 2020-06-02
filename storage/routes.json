@@ -61,5 +61,14 @@
     "animal": "Tiger",
     "color": "e81615",
     "emoteId": "514535865691930634"
+  },
+  {
+    "name": "Minamoto Kou",
+    "description": "Kou is the offspring of the famous exorcist family of Minamoto. Although his skills in exorcism are not that strong at the moment, he's very serious about his responsibilities as a Minamoto and always looks up to his elder brother, Teru, who's a genius exorcist. His friendship with Nene and Hanako makes him rethink about the relationship between human and the mysterious again.",
+    "age": 15,
+    "birthday": "Unknown",
+    "animal": "Dog",
+    "color": "a4d0da",
+    "emoteId": "705279783340212265"
   }
 ]

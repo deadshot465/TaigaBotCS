@@ -16,6 +16,7 @@ namespace TaigaBotCS.Commands
     [Attributes.Command("route", "info", null, null, 5.0f)]
     public class Route : ModuleBase<SocketCommandContext>, ICharacterRoutable, IMemberConfigurable
     {
+        private const string _kouGif = "https://tetsukizone.com/images/kou.gif";
         private readonly string[] _secretRouteEmoteIds = new[]
         {
             "703591584305774662",
@@ -45,7 +46,8 @@ namespace TaigaBotCS.Commands
             var route = GetRoute();
 
             var ending = GetEnding();
-            if (route.name == "Hiro Akiba (Mature)")
+            if (route.name == "Hiro Akiba (Mature)" ||
+                route.name == "Minamoto Kou")
                 ending = (memberConfig?.Language == "en") ? "Perfect" : "パーフェクト";
 
             var title = infos["next"].ToString()
@@ -101,6 +103,11 @@ namespace TaigaBotCS.Commands
                 Title = title
             };
 
+            if (route.name == "Minamoto Kou")
+            {
+                embed.ThumbnailUrl = _kouGif;
+            }
+
             PersistenceService.AddUserRecord(GetType().Name.ToLower(), route.name, Context.User.Id, $"{ending} Ending");
 
             return new Tuple<Embed, string>(embed.Build(), string.Empty);
@@ -137,10 +144,11 @@ namespace TaigaBotCS.Commands
             {
                 var x when x >= 0 && x <= 14 => PersistenceService.Routes[0],
                 var x when x >= 15 && x <= 19 => PersistenceService.Routes[1],
-                var x when x >= 20 && x <= 35 => PersistenceService.Routes[2],
-                var x when x >= 36 && x <= 51 => PersistenceService.Routes[3],
-                var x when x >= 52 && x <= 67 => PersistenceService.Routes[4],
-                var x when x >= 68 && x <= 83 => PersistenceService.Routes[5],
+                var x when x >= 20 && x <= 22 => PersistenceService.Routes[7],
+                var x when x >= 23 && x <= 38 => PersistenceService.Routes[2],
+                var x when x >= 39 && x <= 53 => PersistenceService.Routes[3],
+                var x when x >= 54 && x <= 68 => PersistenceService.Routes[4],
+                var x when x >= 69 && x <= 83 => PersistenceService.Routes[5],
                 var x when x >= 84 && x <= 99 => PersistenceService.Routes[6]
             };
         }

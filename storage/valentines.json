@@ -232,5 +232,77 @@
     "animal": "Unknown",
     "emoteId": "667909099425628163",
     "age": 19
+  },
+  {
+    "birthday": "Unknown",
+    "color": "cf2f28",
+    "name": "Toshu Kanada",
+    "description": "Toshu is a teenage boy with average height and spiky red hair, tanned skin, and red and yellow eyes. He is a young man who is usually timid and vulnerable to verbal attacks, but he's also a kind boy who will do anything to protect and help his friends.",
+    "animal": "Unknown",
+    "emoteId": "586781090849751054",
+    "age": 18
+  },
+  {
+    "birthday": "Unknown",
+    "color": "ffffff",
+    "name": "Ichiru Yanai",
+    "description": "Ichiru is a carefree, energetic and mischievous boy who doesn't like attending classes. However, he has a reputation for being a genius, which is shown by his perfect math scores and his excellent survival and fire-starting skills.",
+    "animal": "Unknown",
+    "emoteId": "586781034067001355",
+    "age": 18
+  },
+  {
+    "birthday": "September 7",
+    "color": "974870",
+    "name": "Yuki",
+    "description": "Yuki is Yoichi's pet dog and is the only family he grew up alongside. He trusts her with his life. Yuki was found by Yoichi two months after Yoichi was left alone by his mother.",
+    "animal": "Siberian Husky",
+    "emoteId": "514292050137579520",
+    "age": 8
+  },
+  {
+    "birthday": "July 11",
+    "color": "e29f0b",
+    "name": "Archer Springfield",
+    "description": "Archer is Hunter's father who has high expectations of his son. He wants his son to have a stable and secure future, and cares about him greatly.",
+    "animal": "Hare",
+    "emoteId": "717293784630689802",
+    "age": 43
+  },
+  {
+    "birthday": "July 11",
+    "color": "e2a00b",
+    "name": "Heather Springfield",
+    "description": "Heather is Hunter's mother. Like her husband, she wants Hunter to succeed in life and inherit the family's business. She always opposes anything she sees as unfit for her child.",
+    "animal": "Fuzzy Lop",
+    "emoteId": "717293784588877874",
+    "age": 42
+  },
+  {
+    "birthday": "October 16",
+    "color": "c97708",
+    "name": "Hina Akiba",
+    "description": "Hina is Hiro's sickly and selfless mother that is very supportive of her son. She always puts Hiro's happiness ahead of her own, but she still knows when to discipline her son. Hina is the one responsible for teaching Hiro how to cook. She also has her own cookbook that she plans to hand down to Hiro.",
+    "animal": "Red Panda",
+    "emoteId": "717293784681021460",
+    "age": 46
+  },
+  {
+    "birthday": "August 31",
+    "color": "deb3ec",
+    "name": "William Clermont",
+    "description": "William is Felix's famous and wealthy father. He's a well-known writer and publicist who has achieved multiple awards for his works. He's very generous and would be willing to support any individual or establishment that he deems worthy.",
+    "animal": "Polar Bear",
+    "emoteId": "717293784773296138",
+    "age": 51
+  },
+  {
+    "birthday": "Unknown",
+    "color": "a4d0da",
+    "name": "Minamoto Kou",
+    "description": "Kou is the offspring of the famous exorcist family of Minamoto. Although his skills in exorcism are not that strong at the moment, he's very serious about his responsibilities as a Minamoto and always looks up to his elder brother, Teru, who's a genius exorcist. His friendship with Nene and Hanako makes him rethink about the relationship between human and the mysterious again.",
+    "animal": "Dog",
+    "emoteId": "705080422278627388",
+    "age": 15
   }
 ]
