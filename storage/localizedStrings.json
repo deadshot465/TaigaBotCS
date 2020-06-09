@@ -253,6 +253,7 @@
           "length_too_short": "<:TaigaAnnoyed2:704143497921429555> At least give me a command's name.",
           "no_such_command": "<:TaigaUneasy2:700006812673638500> There's no such command in my record books."
         },
+        "clear_message": "Record cleared.",
         "info": "Records for `{command}`",
         "result": "Here's {user}'s records with `{command}`\n"
       },
@@ -617,6 +618,7 @@
           "length_too_short": "<:TaigaAnnoyed2:704143497921429555> 命令がないならいくら有能でも何もできねんだよ。",
           "no_such_command": "<:TaigaUneasy2:700006812673638500> 俺の記録の中にこの命令がない。"
         },
+        "clear_message": "記録が削除されました。",
         "info": "`{command}`の使用記録",
         "result": "{user}の`{command}`使用記録は\n"
       },

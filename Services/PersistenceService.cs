@@ -122,6 +122,24 @@ namespace TaigaBotCS.Services
         public static async Task WriteUserRecord()
             => await File.WriteAllBytesAsync(_userRecordPath, JsonSerializer.Serialize(_userStates));
 
+        public static void ClearUserRecord(ulong userId)
+        {
+            if (!_userStates.ContainsKey(userId))
+                return;
+            
+            _userStates[userId].Clear();
+        }
+        
+        public static void ClearUserRecord(string commandName, ulong userId)
+        {
+            if (!_userStates.ContainsKey(userId))
+                return;
+            if (!_userStates[userId].ContainsKey(commandName))
+                return;
+            
+            _userStates[userId][commandName].Clear();
+        }
+
         public static bool SaveData<T>(string key, T value)
         {
             _savedData[key] = value;

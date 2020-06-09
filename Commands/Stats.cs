@@ -36,10 +36,44 @@ namespace TaigaBotCS.Commands
         }
 
         [Command("stats")]
+        [Priority(12)]
+        public async Task StatsAsync(string commandName, string statsName)
+        {
+            SetMemberConfig(Context.User.Id);
+            if (_availableCommands.Contains(commandName))
+            {
+                await StatsAsync(commandName);
+                return;
+            }
+
+            if (commandName.Trim().ToLower() != "reset")
+            {
+                await HandleErrorAsync(StatError.NoSuchCommand);
+                return;
+            }
+
+            if (!_availableCommands.Contains(statsName))
+            {
+                await HandleErrorAsync(StatError.NoSuchCommand);
+                return;
+            }
+            
+            PersistenceService.ClearUserRecord(statsName, Context.User.Id);
+            await Context.Channel.SendMessageAsync(_userLocalization["clear_message"].ToString());
+        }
+
+        [Command("stats")]
         [Priority(10)]
         public async Task StatsAsync(string commandName)
         {
             SetMemberConfig(Context.User.Id);
+
+            if (commandName == "reset")
+            {
+                PersistenceService.ClearUserRecord(Context.User.Id);
+                await Context.Channel.SendMessageAsync(_userLocalization["clear_message"].ToString());
+                return;
+            }
 
             if (!_availableCommands.Contains(commandName))
             {
