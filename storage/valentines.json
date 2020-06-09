@@ -289,20 +289,11 @@
   },
   {
     "birthday": "Unknown",
-    "color": "383838",
-    "name": "Old Lady",
-    "description": "The old lady is a mysterious elder woman who seems to always appear in the right place and the right time. While she can be quite suspicious from time to time, once she's convinced, she can be very generous and supportive of Camp Buddy and its campers.",
-    "animal": "Unknown",
-    "emoteId": "586763535250620417",
-    "age": 66
-  },
-  {
-    "birthday": "Unknown",
     "color": "a4d0da",
     "name": "Minamoto Kou",
     "description": "Kou is the offspring of the famous exorcist family of Minamoto. Although his skills in exorcism are not that strong at the moment, he's very serious about his responsibilities as a Minamoto and always looks up to his elder brother, Teru, who's a genius exorcist. His friendship with Nene and Hanako makes him rethink about the relationship between human and the mysterious again.",
     "animal": "Dog",
     "emoteId": "705080422278627388",
-    "age": 15
+    "age": 14
   }
 ]
