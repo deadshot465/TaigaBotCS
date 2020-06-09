@@ -19,11 +19,6 @@ namespace TaigaBotCS.Commands
             NoSuchCommand
         }
 
-        private readonly string[] _availableCommands = new[]
-        {
-            "route", "valentine"
-        };
-
         private Dictionary<string, object> _userLocalization;
 
         public void SetMemberConfig(ulong userId)
@@ -40,7 +35,7 @@ namespace TaigaBotCS.Commands
         public async Task StatsAsync(string commandName, string statsName)
         {
             SetMemberConfig(Context.User.Id);
-            if (_availableCommands.Contains(commandName))
+            if (PersistenceService.AvailableStats.Contains(commandName))
             {
                 await StatsAsync(commandName);
                 return;
@@ -52,7 +47,7 @@ namespace TaigaBotCS.Commands
                 return;
             }
 
-            if (!_availableCommands.Contains(statsName))
+            if (!PersistenceService.AvailableStats.Contains(statsName))
             {
                 await HandleErrorAsync(StatError.NoSuchCommand);
                 return;
@@ -75,7 +70,7 @@ namespace TaigaBotCS.Commands
                 return;
             }
 
-            if (!_availableCommands.Contains(commandName))
+            if (!PersistenceService.AvailableStats.Contains(commandName))
             {
                 await HandleErrorAsync(StatError.NoSuchCommand);
                 return;
@@ -138,7 +133,7 @@ namespace TaigaBotCS.Commands
 
             var msg = _userLocalization["result"].ToString()
                 .Replace("{user}", Context.User.Username)
-                .Replace("{command}", string.Join(", ", _availableCommands));
+                .Replace("{command}", string.Join(", ", PersistenceService.AvailableStats));
 
             var embed = GetEmbeddedMessage(msg);
 

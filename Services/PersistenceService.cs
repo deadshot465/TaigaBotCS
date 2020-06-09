@@ -16,6 +16,11 @@ namespace TaigaBotCS.Services
         public static List<CharacterObject> Routes { get; private set; }
         public static List<CharacterObject> Valentines { get; private set; }
 
+        public static readonly string[] AvailableStats =
+        {
+            "route", "valentine"
+        };
+
         private static SortedDictionary<ulong, SortedDictionary<string, SortedDictionary<string, dynamic>>> _userStates
             = new SortedDictionary<ulong, SortedDictionary<string, SortedDictionary<string, dynamic>>>();
 
@@ -115,6 +120,14 @@ namespace TaigaBotCS.Services
         {
             if (!_userStates.ContainsKey(userId))
                 _userStates.Add(userId, new SortedDictionary<string, SortedDictionary<string, dynamic>>());
+
+            foreach (var stat in AvailableStats)
+            {
+                if (!_userStates[userId].ContainsKey(stat))
+                {
+                    _userStates[userId].Add(stat, new SortedDictionary<string, dynamic>());
+                }
+            }
 
             return _userStates[userId];
         }
