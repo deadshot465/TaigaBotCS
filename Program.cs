@@ -64,9 +64,16 @@ namespace TaigaBotCS
 
         private ServiceProvider ConfigureServices()
         {
+            var config = new CommandServiceConfig
+            {
+                LogLevel = LogSeverity.Debug, CaseSensitiveCommands = false, DefaultRunMode = RunMode.Async
+            };
+            
+            var commandService = new CommandService(config);
+
             return new ServiceCollection()
                 .AddSingleton<DiscordSocketClient>()
-                .AddSingleton<CommandService>()
+                .AddSingleton(commandService)
                 .AddSingleton<CommandHandlingService>()
                 .AddSingleton<DialogService>()
                 .AddSingleton<ImageService>()
