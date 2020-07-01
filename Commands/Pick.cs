@@ -58,7 +58,7 @@ namespace TaigaBotCS.Commands
                 var result = ulong.TryParse(times, out pickTimes);
                 isMultiple = true;
                 
-                if (!result || pickTimes > uint.MaxValue / 100u)
+                if (!result || pickTimes > uint.MaxValue)
                 {
                     await HandleErrorAsync(PickError.TimesTooBig);
                     return;
